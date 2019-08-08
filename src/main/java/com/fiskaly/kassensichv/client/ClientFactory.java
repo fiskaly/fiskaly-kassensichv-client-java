@@ -33,7 +33,7 @@ public class ClientFactory {
                 .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
                 .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(new AuthenticationInterceptor(tokenManager))
-                .addInterceptor(new TransactionInterceptor())
+                //.addInterceptor(new TransactionInterceptor())
                 .build();
 
         return client;
