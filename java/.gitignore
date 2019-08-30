@@ -25,6 +25,11 @@ hs_err_pid*
 # IntelliJ Idea
 .idea/
 
+#sma
+sma/
+*.dll
+*.so
+
 # Gradle
 *build
 *unpacked
