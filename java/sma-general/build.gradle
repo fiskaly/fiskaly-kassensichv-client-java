@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'com.fiskaly'
+version '0.0.1-alpha'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
+    implementation project(':sma-common')
+}

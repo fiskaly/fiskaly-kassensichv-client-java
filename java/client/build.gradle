@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'com.fiskaly'
+version '0.0.1-alpha'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
+    implementation project(':sma-common')
+    implementation project(':sma-general')
+    testCompile project(':sma-common')
+    testCompile project(':sma-general')
+    implementation (
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9']
+    )
+}
