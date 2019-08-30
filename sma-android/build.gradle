@@ -23,7 +23,7 @@ dependencies {
     mobileLibrary files('src/main/libs/com.fiskaly.kassensichv.sma.mobile.jar')
 }
 
-task copyFiles (type: Copy) {
+task copyFiles (type: Copy) << {
     def aarPath = '../sma/com.fiskaly.kassensichv.sma-android.aar'
     def aar = file(aarPath)
     def archive = zipTree(aar)
