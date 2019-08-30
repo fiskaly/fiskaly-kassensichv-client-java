@@ -32,3 +32,8 @@ hs_err_pid*
 .project
 .settings
 bin
+
+# sma
+sma/
+*.dll
+*.so
