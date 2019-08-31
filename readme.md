@@ -10,24 +10,24 @@ is that you have to instantiate your OkHttpClient through the ```ClientFactory``
 
 ## Features
 
-- [x] Automatic authentication handling (fetch/refresh JWT and re-authenticate upon 401 errors).
-- [ ] Automatic retries on failures (server errors or network timeouts/issues).
+- [X] Automatic authentication handling (fetch/refresh JWT and re-authenticate upon 401 errors).
+- [X] Automatic retries on failures (server errors or network timeouts/issues).
 - [ ] Automatic JSON parsing and serialization of request and response bodies.
-- [ ] Future: [<a name="fn1">1</a>] compliance regarding [BSI CC-PP-0105-2019](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Zertifizierung/Reporte/ReportePP/pp0105b_pdf.pdf?__blob=publicationFile&v=7) which mandates a locally executed SMA component for creating signed log messages. Note: currently, this SMA component is just a dummy implementation.
+- [ ] Future: [<a name="fn1">1</a>] compliance regarding [BSI CC-PP-0105-2019](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Zertifizierung/Reporte/ReportePP/pp0105b_pdf.pdf?__blob=publicationFile&v=7) which mandates a locally executed SMA component for creating signed log messages. Note: this SMA component will be bundled within this package as a binary shared library in a future release. Currently it's a dummy JavaScript implementation.
 - [ ] Future: Automatic offline-handling (collection and documentation according to [Anwendungserlass zu § 146a AO](https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Weitere_Steuerthemen/Abgabenordnung/AO-Anwendungserlass/2019-06-17-einfuehrung-paragraf-146a-AO-anwendungserlass-zu-paragraf-146a-AO.pdf?__blob=publicationFile&v=1))
 
 ## Build project
 The project uses [Gradle](https://gradle.org/) as a build and dependency management tool.
-In order to build a JAR that can be used in your project, use the following command:
+In order to build the project, use the following command:
+
 
 ```
-$ ./gradlew buildFatJar
+$ ./gradlew jar
 ```
 
-This will create a JAR that contains all necessary dependencies and resources that are needed 
-in order to use the library. 
+This will result in multiple JAR-files for each sub-project that can be used in your project.
 
-The built library will be available at ```./build/libs/fiskaly-kassensich-client.jar-<version>.jar```.
+The built library will be available at ```<sub-project-name>/build/libs/<sub-project-name>-<version>.jar```.
 
 ## Usage example
 
@@ -40,10 +40,14 @@ public class Main {
   private static final ObjectMapper mapper = new ObjectMapper(); 
 
   public static void Main(String[] args) {
+    // Instantiate the appropriate SMA implementation for your target platform
+    GeneralSMA sma = new GeneralSMA();
+
     // Instantiate the OkHttpClient using the provided Factory class
-    OkHttpClient client = ClientFactory.getClient(apiKey, apiSecret);
+    OkHttpClient client = ClientFactory.getClient(apiKey, apiSecret, sma);
 
     // Create a basic TSS
+
     Map<String, String> tssMap = new HashMap<>();
 
     tssMap.put("state", "INITIALIZED");

@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.fiskaly'
+version '0.0.1-alpha'
+
+sourceCompatibility = 1.8
+
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    mobileLibrary
+}
+
+dependencies {
+    compile project(':sma-common')
+    compile files('src/main/libs/com.fiskaly.kassensichv.sma.mobile.jar')
+    mobileLibrary files('src/main/libs/com.fiskaly.kassensichv.sma.mobile.jar')
+}
+
+task copyFiles (type: Copy) {
+    def aarPath = '../sma/com.fiskaly.kassensichv.sma-android.aar'
+    def aar = file(aarPath)
+    def archive = zipTree(aar)
+
+    copy {
+        from archive
+        into file('../sma/unpacked')
+    }
+
+    def basePath = '../sma/unpacked/'
+    def smaAndroidBasePath = 'src/main/'
+
+    copy {
+        from file(basePath + 'classes.jar')
+        into file(smaAndroidBasePath + 'libs')
+        rename { fileName ->
+            fileName.replace 'classes', 'com.fiskaly.kassensichv.sma.mobile'
+        }
+    }
+
+    copy {
+        from file(basePath + 'jni')
+        into file(smaAndroidBasePath + 'resources/lib')
+    }
+}
+
+jar {
+    from {
+        configurations.mobileLibrary.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
