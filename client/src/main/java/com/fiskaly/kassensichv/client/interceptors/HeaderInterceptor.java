@@ -7,8 +7,7 @@ import okhttp3.Response;
 import java.io.IOException;
 
 /**
- * Intercepts requests in order to prepend a base url
- * as well as to set a new user agent
+ * Overwrites the user agent and sets the appropriate content-type header
  */
 public class HeaderInterceptor implements Interceptor {
     @Override

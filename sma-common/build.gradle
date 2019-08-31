@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'application'
 }
 
 group 'com.fiskaly'
@@ -12,13 +11,5 @@ repositories {
     mavenCentral()
 }
 
-subprojects {
-    apply plugin: 'java'
-
-    repositories {
-        mavenCentral()
-    }
+dependencies {
 }
-
-dependencies { }
-

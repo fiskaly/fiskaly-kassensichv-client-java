@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'application'
 }
 
 group 'com.fiskaly'
@@ -12,13 +11,7 @@ repositories {
     mavenCentral()
 }
 
-subprojects {
-    apply plugin: 'java'
-
-    repositories {
-        mavenCentral()
-    }
+dependencies {
+    compile group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
+    implementation project(':sma-common')
 }
-
-dependencies { }
-

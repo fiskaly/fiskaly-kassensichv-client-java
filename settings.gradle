@@ -1,2 +1,6 @@
 rootProject.name = 'fiskaly-kassensichv-client'
+include ':sma-common'
+include ':sma-android'
+include ':sma-general'
+include ':client'
 

@@ -2,7 +2,11 @@ package com.fiskaly.kassensichv.client.authentication;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,6 +29,9 @@ public class TokenManager implements Runnable {
 
         this.apiKey = apiKey;
         this.secret = secret;
+
+        // initial fetch
+        this.fetchTokenPair();
     }
 
     private void setTokenPair(String accessToken, String refreshToken) {
@@ -36,9 +43,25 @@ public class TokenManager implements Runnable {
         return this.accessToken;
     }
 
-    // Gets called when token needs to be refreshed
-    @Override
-    public void run() {
+    /**
+     * Parses the response of the authentication request
+     * and extracts the token pair
+     * @param responseBody Response body of the authentication request
+     * @throws IOException In case of the body not being parsable
+     */
+    private void setTokenPairFromResponseBody(String responseBody) throws IOException {
+        final TypeReference<HashMap<String, String>> typeReference =
+                new TypeReference<HashMap<String, String>>() {};
+
+        Map<String, String> decodedBody = mapper.readValue(responseBody, typeReference);
+
+        String accessToken = decodedBody.get("access_token");
+        String refreshToken = decodedBody.get("refresh_token");
+
+        this.setTokenPair(accessToken, refreshToken);
+    }
+
+    private void fetchTokenPair() {
         Request request;
         RequestBody body;
 
@@ -66,18 +89,15 @@ public class TokenManager implements Runnable {
                 .build();
 
         try(Response response = client.newCall(request).execute()) {
-            final String responseBody = response.body().string();
-            final TypeReference<HashMap<String, String>> typeReference =
-                    new TypeReference<HashMap<String, String>>() {};
-
-            Map<String, String> decodedBody = mapper.readValue(responseBody, typeReference);
-
-            String accessToken = decodedBody.get("access_token");
-            String refreshToken = decodedBody.get("refresh_token");
-
-            this.setTokenPair(accessToken, refreshToken);
+            this.setTokenPairFromResponseBody(response.body().string());
         } catch (IOException ioe) {
             System.err.println(ioe);
         }
+    }
+
+    // Gets called when token needs to be refreshed
+    @Override
+    public void run() {
+        fetchTokenPair();
     }
 }
