@@ -1,5 +1,6 @@
 package com.fiskaly.kassensichv.client;
 
+import com.fiskaly.kassensichv.client.authentication.Authenticator;
 import com.fiskaly.kassensichv.client.authentication.TokenManager;
 import com.fiskaly.kassensichv.client.interceptors.AuthenticationInterceptor;
 import com.fiskaly.kassensichv.client.interceptors.HeaderInterceptor;
@@ -33,6 +34,7 @@ public class ClientFactory {
                 .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(new AuthenticationInterceptor(tokenManager))
                 .addInterceptor(new TransactionInterceptor(sma))
+                .authenticator(new Authenticator(tokenManager))
                 .build();
 
         return client;
