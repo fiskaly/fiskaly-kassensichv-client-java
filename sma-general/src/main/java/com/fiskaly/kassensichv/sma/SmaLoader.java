@@ -50,7 +50,9 @@ public class SmaLoader {
             }
 
         } finally {
-            libraryStream.close();
+            if (libraryStream != null) {
+                libraryStream.close();
+            }
 
             if (targetOutStream != null) {
                 targetOutStream.close();
