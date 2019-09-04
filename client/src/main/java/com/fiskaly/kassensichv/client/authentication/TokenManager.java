@@ -29,17 +29,14 @@ public class TokenManager implements Runnable {
 
         this.apiKey = apiKey;
         this.secret = secret;
-
-        // initial fetch
-        this.fetchTokenPair();
     }
 
-    private void setTokenPair(String accessToken, String refreshToken) {
+    private synchronized void setTokenPair(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
-    public String getAccessToken() {
+    public synchronized String getAccessToken() {
         return this.accessToken;
     }
 
@@ -49,7 +46,7 @@ public class TokenManager implements Runnable {
      * @param responseBody Response body of the authentication request
      * @throws IOException In case of the body not being parsable
      */
-    private void setTokenPairFromResponseBody(String responseBody) throws IOException {
+    private void  setTokenPairFromResponseBody(String responseBody) throws IOException {
         final TypeReference<HashMap<String, String>> typeReference =
                 new TypeReference<HashMap<String, String>>() {};
 
@@ -61,23 +58,25 @@ public class TokenManager implements Runnable {
         this.setTokenPair(accessToken, refreshToken);
     }
 
-    private void fetchTokenPair() {
+    public synchronized void fetchTokenPair() {
         Request request;
         RequestBody body;
 
         // First fetch
         if (this.accessToken == null) {
-            String jsonBody = "{" +
+            String jsonBody =
+                "{" +
                     "\"api_key\":\"" + this.apiKey + "\"," +
                     "\"api_secret\": \"" + this.secret + "\"" +
-                    "}";
+                "}";
 
             body = RequestBody.create(jsonBody, JSON);
         // Token needs to be refreshed
         } else {
-            String jsonBody = "{" +
+            String jsonBody =
+                "{" +
                     "\"refresh_token\": \"" + this.refreshToken + "\"" +
-                    "}";
+                "}";
 
             body = RequestBody.create(jsonBody, JSON);
         }
@@ -89,10 +88,16 @@ public class TokenManager implements Runnable {
                 .build();
 
         try(Response response = client.newCall(request).execute()) {
-            this.setTokenPairFromResponseBody(response.body().string());
+            this.setTokenPairFromResponseBody(
+                response
+                    .body()
+                    .string()
+            );
         } catch (IOException ioe) {
             System.err.println(ioe);
         }
+
+
     }
 
     // Gets called when token needs to be refreshed
