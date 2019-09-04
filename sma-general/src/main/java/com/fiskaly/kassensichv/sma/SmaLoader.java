@@ -20,6 +20,7 @@ public class SmaLoader {
         extensions.put("linux", ".so");
         extensions.put("windows", ".dll");
         extensions.put("osx", ".dylib");
+        extensions.put("mac os x", ".dylib");
 
         architectures = new HashMap<>();
 
