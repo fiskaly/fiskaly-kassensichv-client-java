@@ -1,0 +1,3 @@
+[submodule "sma"]
+	path = sma
+	url = https://github.com/fiskaly/fiskaly-kassensichv-sma.git
