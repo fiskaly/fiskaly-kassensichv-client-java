@@ -19,28 +19,27 @@ configurations {
 
 dependencies {
     compile project(':sma-common')
-    compile files('src/main/libs/com.fiskaly.kassensichv.sma.mobile.jar')
-    mobileLibrary files('src/main/libs/com.fiskaly.kassensichv.sma.mobile.jar')
+    compile files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
+    mobileLibrary files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
 }
 
 task copyFiles (type: Copy) {
-    def aarPath = '../sma/com.fiskaly.kassensichv.sma-android.aar'
+    def basePath = 'build/sma-unpacked/'
+    def smaAndroidBasePath = 'src/main/'
+    def aarPath = '../sma/dist/com.fiskaly.kassensichv.sma-android.aar'
     def aar = file(aarPath)
     def archive = zipTree(aar)
 
     copy {
         from archive
-        into file('../sma/unpacked')
+        into file(basePath)
     }
-
-    def basePath = '../sma/unpacked/'
-    def smaAndroidBasePath = 'src/main/'
 
     copy {
         from file(basePath + 'classes.jar')
         into file(smaAndroidBasePath + 'libs')
         rename { fileName ->
-            fileName.replace 'classes', 'com.fiskaly.kassensichv.sma.mobile'
+            fileName.replace 'classes', 'com.fiskaly.kassensichv.sma'
         }
     }
 
