@@ -17,9 +17,15 @@ is that you have to instantiate your OkHttpClient through the ```ClientFactory``
 - [ ] Future: Automatic offline-handling (collection and documentation according to [Anwendungserlass zu § 146a AO](https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Weitere_Steuerthemen/Abgabenordnung/AO-Anwendungserlass/2019-06-17-einfuehrung-paragraf-146a-AO-anwendungserlass-zu-paragraf-146a-AO.pdf?__blob=publicationFile&v=1))
 
 ## Build project
+
+First of all, you have to initialize the required git submodule(s) using:
+
+```
+$ git submodule update
+```
+
 The project uses [Gradle](https://gradle.org/) as a build and dependency management tool.
 In order to build the project, use the following command:
-
 
 ```
 $ ./gradlew jar
