@@ -52,17 +52,30 @@ public class TransactionInterceptor implements Interceptor {
         return mapper.writeValueAsString(resultMap.get("result"));
     }
 
+        String rewriteRoute(String sourceUrl) {
+        List<String> parts = new LinkedList<>(Arrays.asList(sourceUrl.split("\\?")));
+
+        String host = parts.remove(0);
+        String queryList = String.join("?", parts);
+
+        if (!queryList.isEmpty()) {
+            queryList = "?" + queryList;
+        }
+
+        String targetUrl = host + "/log" + queryList;
+
+        return targetUrl;
+    }
+
+
     private Request createReroutedRequest(Request request) {
-        String originalUrl = request
+        String sourceUrl = request
                 .url()
                 .toString();
 
-        List<String> parts = new LinkedList<>(Arrays.asList(originalUrl.split("\\?")));
-
-        String host = parts.remove(0);
-        String newUrl = host + "/log" + String.join("?", parts);
-
-        HttpUrl url = HttpUrl.parse(newUrl);
+        String targetUrl = rewriteRoute(sourceUrl);
+        
+        HttpUrl url = HttpUrl.parse(targetUrl);
 
         request = request
                 .newBuilder()
