@@ -16,7 +16,7 @@ public class SmaLoader {
 
     private static final String OS_WINDOWS = "windows";
     private static final String OS_LINUX = "linux";
-    private static final String OS_OSX = "osx";
+    private static final String OS_OSX = "darwin";
 
     static {
         extensions = new HashMap<>();
