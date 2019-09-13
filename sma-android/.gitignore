@@ -1,2 +1,3 @@
 src/main/resources/lib
 src/main/libs/com.fiskaly.kassensichv.sma.jar
+out/production/resources/lib
