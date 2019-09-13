@@ -30,10 +30,10 @@ dependencies {
     testCompile project(':sma-android')
 
     desktopLibs project(':sma-general')
+    desktopLibs group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
 
     androidLibs project(':sma-android')
 
-    extraLibs group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
     extraLibs project(':sma-common')
 
     implementation (
@@ -67,10 +67,6 @@ jar {
 task clientAndroid(type: Jar){
 
     baseName = "clientAndroid"
-
-    from('../sma/dist/') {
-        include 'com.fiskaly.kassensichv.sma-android-*'
-    }
 
     from {
         configurations.androidLibs.collect { it.isDirectory() ? it : zipTree(it) }
