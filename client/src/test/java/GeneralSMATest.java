@@ -11,7 +11,7 @@ public class GeneralSMATest {
 
     public static void main(String[] args) {
 
-        try{
+        try {
             generalSMA = new GeneralSMA();
         } catch (IOException e){
             System.out.println(e.getMessage());

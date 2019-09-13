@@ -45,7 +45,7 @@ dependencies {
 
 jar {
 
-    baseName = "clientDesktop"
+    baseName = "com.fiskaly.kassensichv.client.desktop"
 
     from('../sma/dist/') {
         include 'com.fiskaly.kassensichv.sma-darwin-*'
@@ -66,7 +66,7 @@ jar {
 
 task clientAndroid(type: Jar){
 
-    baseName = "clientAndroid"
+    baseName = "com.fiskaly.kassensichv.client.android"
 
     from {
         configurations.androidLibs.collect { it.isDirectory() ? it : zipTree(it) }
