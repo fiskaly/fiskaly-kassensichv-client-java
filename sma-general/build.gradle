@@ -11,32 +11,7 @@ repositories {
     mavenCentral()
 }
 
-configurations {
-    // configuration that holds jars to include in the jar
-    extraLibs
-}
-
 dependencies {
     compile group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
-    extraLibs group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
     implementation project(':sma-common')
-    configurations.compile.extendsFrom(configurations.extraLibs)
-}
-
-jar {
-
-    //check for given OS and include the right resources into the jar file
-    from('../sma/dist/') {
-        include 'com.fiskaly.kassensichv.sma-darwin-*'
-        include 'com.fiskaly.kassensichv.sma-windows-*'
-        include 'com.fiskaly.kassensichv.sma-linux-*'
-    }
-    
-    from('../sma-common/src/main/java') {
-        include '*'
-    }
-
-    from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
