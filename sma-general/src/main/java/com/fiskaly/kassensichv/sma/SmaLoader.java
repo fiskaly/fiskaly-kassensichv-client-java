@@ -14,19 +14,36 @@ public class SmaLoader {
     private static Map<String, String> extensions;
     private static Map<String, String> architectures;
 
+    private static final String OS_WINDOWS = "windows";
+    private static final String OS_LINUX = "linux";
+    private static final String OS_OSX = "osx";
+
     static {
         extensions = new HashMap<>();
 
-        extensions.put("linux", ".so");
-        extensions.put("windows", ".dll");
-        extensions.put("osx", ".dylib");
-        extensions.put("mac os x", ".dylib");
+        extensions.put(OS_LINUX, ".so");
+        extensions.put(OS_WINDOWS, ".dll");
+        extensions.put(OS_OSX, ".dylib");
 
         architectures = new HashMap<>();
 
         architectures.put("x86_64", "amd64");
         architectures.put("amd64", "amd64");
         architectures.put("x32", "386");
+    }
+
+    private static String getOSName() {
+        String osName = System.getProperty("os.name").toLowerCase();
+
+        if (osName.contains("windows")) {
+            return OS_WINDOWS;
+        }
+
+        if (osName.contains("os x") || osName.contains("darwin") || osName.contains("mac")) {
+            return OS_OSX;
+        }
+
+        return OS_LINUX;
     }
 
     private static void unpackLibraryIntoTempDirectory() throws IOException {
@@ -62,7 +79,7 @@ public class SmaLoader {
 
     private static String buildLibraryName() {
         String osArchitecture = System.getProperty("os.arch");
-        String osName = System.getProperty("os.name").toLowerCase();
+        String osName = getOSName();
         String libArchitecture = architectures.containsKey(osArchitecture) ?
                 architectures.get(osArchitecture) : architectures.get("386");
         String libExtension = extensions.get(osName);
