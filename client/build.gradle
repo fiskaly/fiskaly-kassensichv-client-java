@@ -12,9 +12,9 @@ repositories {
 }
 
 configurations {
-    desktopLibs
+    generalLibs
     androidLibs
-    extraLibs
+    commonLibs
 }
 
 dependencies {
@@ -29,12 +29,12 @@ dependencies {
     testCompile project(':sma-general')
     testCompile project(':sma-android')
 
-    desktopLibs project(':sma-general')
-    desktopLibs group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
+    generalLibs project(':sma-general')
+    generalLibs group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
 
     androidLibs project(':sma-android')
 
-    extraLibs project(':sma-common')
+    commonLibs project(':sma-common')
 
     implementation (
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
@@ -54,11 +54,11 @@ jar {
     }
 
     from {
-        configurations.desktopLibs.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.generalLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
     from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.commonLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
     from configurations.runtime
@@ -73,7 +73,7 @@ task clientAndroid(type: Jar){
     }
 
     from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.commonLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
     from configurations.runtime
