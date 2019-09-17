@@ -13,8 +13,9 @@ public class GeneralSMATest {
         try {
             generalSMA = new GeneralSMA();
         } catch (IOException e){
-            System.out.println("Error in Test \"invokeResponseTest\":");
-            System.out.println(e.getMessage());
+            System.err.println("Error in Test \"invokeResponseTest\":");
+            System.err.println(e.getMessage());
+            System.exit(1);
         }
 
         invokeResponseTest();
@@ -25,7 +26,8 @@ public class GeneralSMATest {
         String invokeResponse = generalSMA.invoke("{\"jsonrpc\":\"2.0\",\"method\":\"version\"}");
 
         if(invokeResponse == null || invokeResponse.equals("")){
-            System.out.println("Error in Test \"invokeResponseTest\": \nGot Null or Empty return value.");
+            System.err.println("Error in Test \"invokeResponseTest\": \nGot Null or Empty return value.");
+            System.exit(1);
         } else {
             System.out.println("Test \"invokeResponseTest\" completed successfully.");
         }
