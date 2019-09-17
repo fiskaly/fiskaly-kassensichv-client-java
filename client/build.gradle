@@ -45,7 +45,7 @@ dependencies {
 
 jar {
 
-    baseName = "com.fiskaly.kassensichv.client.desktop"
+    baseName = "com.fiskaly.kassensichv.client.general"
 
     from('../sma/dist/') {
         include 'com.fiskaly.kassensichv.sma-darwin-*'

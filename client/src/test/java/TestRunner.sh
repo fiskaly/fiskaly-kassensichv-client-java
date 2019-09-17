@@ -1,11 +1,11 @@
 #!/bin/sh
 
-ClientDesktop='../../../build/libs/com.fiskaly.kassensichv.client.desktop-0.0.1-alpha.jar'
+ClientGeneral='../../../build/libs/com.fiskaly.kassensichv.client.general-0.0.1-alpha.jar'
 
 #run GeneralSMATest
-javac -cp ${ClientDesktop}:. GeneralSMATest.java
+javac -cp ${ClientGeneral}:. GeneralSMATest.java
 
-java -cp ${ClientDesktop}:. GeneralSMATest
+java -cp ${ClientGeneral}:. GeneralSMATest
 
 #cleanup
 rm GeneralSMATest.class

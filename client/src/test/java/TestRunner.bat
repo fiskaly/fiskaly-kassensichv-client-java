@@ -1,11 +1,11 @@
 @echo off
 
-SET ClientDesktop=../../../build/libs/com.fiskaly.kassensichv.client.desktop-0.0.1-alpha.jar
+SET ClientGeneral=../../../build/libs/com.fiskaly.kassensichv.client.general-0.0.1-alpha.jar
 
 REM run GeneralSMATest
-javac -cp %ClientDesktop%;. GeneralSMATest.java
+javac -cp %ClientGeneral%;. GeneralSMATest.java
 
-java -cp %ClientDesktop%;. GeneralSMATest
+java -cp %ClientGeneral%;. GeneralSMATest
 
 REM cleanup
 del GeneralSMATest.class
