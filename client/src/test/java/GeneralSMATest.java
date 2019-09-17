@@ -6,17 +6,11 @@ public class GeneralSMATest {
 
     public static GeneralSMA generalSMA = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
         System.out.println("GeneralSMATest");
 
-        try {
-            generalSMA = new GeneralSMA();
-        } catch (IOException e){
-            System.err.println("Error in Test \"invokeResponseTest\":");
-            System.err.println(e.getMessage());
-            System.exit(1);
-        }
+        generalSMA = new GeneralSMA();
 
         invokeResponseTest();
     }
