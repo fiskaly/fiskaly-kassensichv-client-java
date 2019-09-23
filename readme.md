@@ -21,7 +21,7 @@ is that you have to instantiate your OkHttpClient through the ```ClientFactory``
 First of all, you have to initialize the required git submodule(s) using:
 
 ```
-$ git submodule update
+$ git submodule update --init
 ```
 
 The project uses [Gradle](https://gradle.org/) as a build and dependency management tool.
@@ -33,7 +33,14 @@ $ ./gradlew jar
 
 This will result in multiple JAR-files for each sub-project that can be used in your project.
 
-The built library will be available at ```<sub-project-name>/build/libs/<sub-project-name>-<version>.jar```.
+Each built library will be available at ```<sub-project-name>/build/libs/<sub-project-name>-<version>.jar```.
+
+
+## Integration
+To integrate the client into your project, use the appropriate client build for your target platform.
+
+* `client/build/libs/com.fiskaly.kassensichv.client.general-<version>.jar` for standard Java platforms
+* `client/build/libs/com.fiskaly.kassensichv.client.android-<version>.jar` for Android
 
 ## Usage example
 
