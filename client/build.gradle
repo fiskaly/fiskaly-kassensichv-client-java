@@ -11,16 +11,72 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    generalLibs
+    androidLibs
+    commonLibs
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
+
     implementation project(':sma-common')
     implementation project(':sma-general')
+    implementation project(':sma-android')
+
     testCompile project(':sma-common')
     testCompile project(':sma-general')
+    testCompile project(':sma-android')
+
+    generalLibs project(':sma-general')
+    generalLibs group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
+
+    androidLibs project(':sma-android')
+
+    commonLibs project(':sma-common')
+
     implementation (
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9']
     )
 }
+
+jar {
+
+    baseName = "com.fiskaly.kassensichv.client.general"
+
+    from('../sma/dist/') {
+        include 'com.fiskaly.kassensichv.sma-darwin-*'
+        include 'com.fiskaly.kassensichv.sma-windows-*'
+        include 'com.fiskaly.kassensichv.sma-linux-*'
+    }
+
+    from {
+        configurations.generalLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from {
+        configurations.commonLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from configurations.runtime
+}
+
+task clientAndroid(type: Jar){
+
+    baseName = "com.fiskaly.kassensichv.client.android"
+
+    from {
+        configurations.androidLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from {
+        configurations.commonLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from configurations.runtime
+}
+
+jar.dependsOn(clientAndroid)
