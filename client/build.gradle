@@ -19,7 +19,7 @@ configurations {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
+    compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
 
     implementation project(':sma-common')
     implementation project(':sma-general')
@@ -36,16 +36,33 @@ dependencies {
 
     commonLibs project(':sma-common')
 
-    implementation (
+    compile (
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9']
     )
 }
 
-jar {
+task buildAndroid (type: Jar){
+    baseName = "com.fiskaly.kassensichv.client.android"
+    duplicatesStrategy = 'exclude'
 
+    from {
+        configurations.androidLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from {
+        configurations.commonLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from configurations.compile
+
+    with jar
+}
+
+task buildGeneral (type: Jar) {
     baseName = "com.fiskaly.kassensichv.client.general"
+    duplicatesStrategy = 'exclude'
 
     from('../sma/dist/') {
         include 'com.fiskaly.kassensichv.sma-darwin-*'
@@ -61,22 +78,10 @@ jar {
         configurations.commonLibs.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
-    from configurations.runtime
+    from configurations.compile
+
+    with jar
 }
 
-task clientAndroid(type: Jar){
-
-    baseName = "com.fiskaly.kassensichv.client.android"
-
-    from {
-        configurations.androidLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-
-    from {
-        configurations.commonLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-
-    from configurations.runtime
-}
-
-jar.dependsOn(clientAndroid)
+jar.dependsOn(buildGeneral)
+jar.dependsOn(buildAndroid)

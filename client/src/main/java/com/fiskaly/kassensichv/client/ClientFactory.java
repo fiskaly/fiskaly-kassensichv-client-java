@@ -3,8 +3,10 @@ package com.fiskaly.kassensichv.client;
 import com.fiskaly.kassensichv.client.authentication.Authenticator;
 import com.fiskaly.kassensichv.client.authentication.TokenManager;
 import com.fiskaly.kassensichv.client.interceptors.AuthenticationInterceptor;
+import com.fiskaly.kassensichv.client.interceptors.FailureInterceptor;
 import com.fiskaly.kassensichv.client.interceptors.HeaderInterceptor;
 import com.fiskaly.kassensichv.client.interceptors.TransactionInterceptor;
+import com.fiskaly.kassensichv.client.persistence.PersistenceStrategy;
 import com.fiskaly.kassensichv.sma.SMA;
 import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
@@ -34,6 +36,27 @@ public class ClientFactory {
                 .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(new AuthenticationInterceptor(tokenManager))
                 .addInterceptor(new TransactionInterceptor(sma))
+                .authenticator(new Authenticator(tokenManager))
+                .build();
+
+        return client;
+    }
+
+    public static OkHttpClient getPersistingClient(String apiKey, String secret, SMA sma, PersistenceStrategy persistenceStrategy) {
+        TokenManager tokenManager = new TokenManager(
+                new OkHttpClient
+                        .Builder()
+                        .build(),
+                apiKey,
+                secret);
+
+        OkHttpClient client = new OkHttpClient
+                .Builder()
+                .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
+                .addInterceptor(new HeaderInterceptor())
+                .addInterceptor(new AuthenticationInterceptor(tokenManager))
+                .addInterceptor(new TransactionInterceptor(sma))
+                .addInterceptor(new FailureInterceptor(persistenceStrategy))
                 .authenticator(new Authenticator(tokenManager))
                 .build();
 
