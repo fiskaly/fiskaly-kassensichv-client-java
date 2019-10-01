@@ -2,25 +2,48 @@ package com.fiskaly.kassensichv.client.interceptors;
 
 import com.fiskaly.kassensichv.client.persistence.PersistenceStrategy;
 import okhttp3.Interceptor;
+import okhttp3.Request;
 import okhttp3.Response;
+import okio.Buffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.ProtocolException;
+import java.util.List;
 
 public class FailureInterceptor implements Interceptor {
-    public FailureInterceptor(PersistenceStrategy strategy) {}
+    private PersistenceStrategy strategy;
+
+    public FailureInterceptor(PersistenceStrategy strategy) {
+        this.strategy = strategy;
+    }
 
     @NotNull
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
         try {
             Response response = chain.proceed(chain.request());
+
+            return response;
         } catch (ProtocolException e) {
-            // persist call
+            Request request = chain.request();
+
+            Buffer sink = new Buffer();
+            request.body().writeTo(sink);
+            String body = sink.readUtf8();
+            sink.close();
+
+            this.strategy.persistRequest(
+                    new com.fiskaly.kassensichv.client.persistence
+                            .Request(request.url().toString(), body, request.method())
+            );
+
+            List<com.fiskaly.kassensichv.client.persistence.Request> requests = this.strategy.loadRequests();
+
+            requests.forEach(System.out::println);
+
             throw e;
         }
 
-        return null;
     }
 }
