@@ -41,6 +41,8 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9']
     )
+
+    compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
 }
 
 task buildAndroid (type: Jar){
