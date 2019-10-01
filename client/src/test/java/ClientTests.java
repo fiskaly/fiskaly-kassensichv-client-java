@@ -1,29 +1,38 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiskaly.kassensichv.client.ClientFactory;
+import com.fiskaly.kassensichv.client.persistence.SqliteStrategy;
 import com.fiskaly.kassensichv.sma.GeneralSMA;
 import okhttp3.*;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.fiskaly.kassensichv.client.ClientFactory.*;
+import static com.fiskaly.kassensichv.client.ClientFactory.getPersistingClient;
 import static org.junit.Assert.*;
 
 /**
  * Set of integration tests for the modified OkHttp client
  */
 public class ClientTests {
-    private static String apiKey = System.getenv("API_KEY");
-    private static String secret = System.getenv("API_SECRET");
+    // private static String apiKey = System.getenv("API_KEY");
+    // private static String apiKey = "test_al4054nd7402ju9j2igtzlbbf_javasdktest";
+    private static String apiKey = "test_al4054nd7402ju9j2igtzlbbf_javasdktest";
+    // private static String secret = System.getenv("API_SECRET");
+    private static String secret = "8EKTe7ujtEhq6BJ7jJmV5U5Lg2I51U66o3Zf2mubbld";
 
     private static OkHttpClient client;
 
     static {
         try {
-            client = getClient(apiKey, secret, new GeneralSMA());
+            client = getPersistingClient(apiKey, secret, new GeneralSMA(), new SqliteStrategy(new File("/tmp")));
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -165,5 +174,26 @@ public class ClientTests {
                 .execute();
 
         assertEquals(200, txResponse.code());
+    }
+
+    @Test
+    public void faultyAuthenticationShouldPersist() throws SQLException, IOException {
+        final String directoryId = UUID.randomUUID().toString();
+
+        OkHttpClient faultyClient = ClientFactory.getPersistingClient("invalid", "also-invalid",
+                new GeneralSMA(), new SqliteStrategy(new File("/tmp/" + UUID.randomUUID())));
+
+        // List TSS request
+        final Request request = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss")
+                .get()
+                .build();
+
+        final Response response = faultyClient
+                .newCall(request)
+                .execute();
+
+        // clean up
     }
 }
