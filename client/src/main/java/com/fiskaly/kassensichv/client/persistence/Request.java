@@ -34,4 +34,11 @@ public class Request {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public String toString() {
+        return "Method: " + method + "\n" +
+                "URL: " + url + "\n" +
+                "Body:\n" + body + "\n";
+    }
 }

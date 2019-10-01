@@ -3,6 +3,8 @@ package com.fiskaly.kassensichv.client.persistence;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqliteStrategy implements PersistenceStrategy {
     private Connection dbConnection;
@@ -16,20 +18,20 @@ public class SqliteStrategy implements PersistenceStrategy {
         this.initDatabase(databaseDirectory);
     }
 
-    private void initDatabase(File databaseDirectory) throws SQLException {
-        String connectionUrl =  "";
+    private void initDatabase(File databasePath) throws SQLException {
+        String connectionUrl =  "jdbc:sqlite:" + databasePath.getAbsolutePath() + File.separator + "db.sqlite";
         this.dbConnection = DriverManager.getConnection(connectionUrl);
         this.createTables();
     }
 
     private void createTables() throws SQLException {
-        String createTable = "create table " + this.REQUEST_TABLE;
+        String createTable = "create table if not exists " + this.REQUEST_TABLE;
         createTable +=
                 "(" +
-                    "creation_date datetime primary key,\n" +
+                    "creation_date datetime primary key default current_timestamp,\n" +
                     "method varchar(8) not null,\n" +
                     "body varchar(5012) not null,\n" +
-                    "url varchar(512) not null,\n" +
+                    "url varchar(512) not null\n" +
                 ");"
         ;
 
@@ -40,9 +42,13 @@ public class SqliteStrategy implements PersistenceStrategy {
     @Override
     public void persistRequest(Request request) throws IOException {
         String insertQuery = "insert into " + this.REQUEST_TABLE;
-        insertQuery += "(id, method, body, url) values(?, ?, ?, ?)";
+        insertQuery += "(method, body, url) values(?, ?, ?)";
 
         try (PreparedStatement persistStatement = this.dbConnection.prepareStatement(insertQuery)) {
+            persistStatement.setString(1, request.getMethod());
+            persistStatement.setString(2, request.getBody());
+            persistStatement.setString(3, request.getUrl());
+
             persistStatement.execute();
         } catch (SQLException e) {
             throw new IOException("Failed to persist data into SQLite: " + e);
@@ -50,7 +56,23 @@ public class SqliteStrategy implements PersistenceStrategy {
     }
 
     @Override
-    public Request[] loadRequests() throws IOException {
-        return new Request[0];
+    public List<Request> loadRequests() throws IOException {
+        String selectQuery = "select creation_date, method, body, url from request";
+        ArrayList<Request> requests = new ArrayList<>();
+
+        try (Statement requestStatement = this.dbConnection.createStatement();
+             ResultSet result = requestStatement.executeQuery(selectQuery)) {
+            while(result.next()) {
+                requests.add(new Request(
+                        result.getString(4),
+                        result.getString(3),
+                        result.getString(2)
+                ));
+            }
+        } catch (SQLException e) {
+            throw new IOException("Failed to load data from SQLite: " + e);
+        }
+
+        return requests;
     }
 }
