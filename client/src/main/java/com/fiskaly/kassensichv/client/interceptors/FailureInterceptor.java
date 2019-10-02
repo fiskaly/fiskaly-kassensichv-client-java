@@ -29,9 +29,13 @@ public class FailureInterceptor implements Interceptor {
             Request request = chain.request();
 
             Buffer sink = new Buffer();
-            request.body().writeTo(sink);
-            String body = sink.readUtf8();
-            sink.close();
+            String body = "";
+
+            if (request.body() != null) {
+                request.body().writeTo(sink);
+                body = sink.readUtf8();
+                sink.close();
+            }
 
             this.strategy.persistRequest(
                     new com.fiskaly.kassensichv.client.persistence
