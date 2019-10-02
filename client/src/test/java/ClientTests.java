@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiskaly.kassensichv.client.ClientFactory;
+import com.fiskaly.kassensichv.client.persistence.PersistenceStrategy;
 import com.fiskaly.kassensichv.client.persistence.SqliteStrategy;
 import com.fiskaly.kassensichv.sma.GeneralSMA;
 import okhttp3.*;
@@ -7,8 +8,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ProtocolException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,19 +22,21 @@ import static org.junit.Assert.*;
  * Set of integration tests for the modified OkHttp client
  */
 public class ClientTests {
-    // private static String apiKey = System.getenv("API_KEY");
-    // private static String apiKey = "test_al4054nd7402ju9j2igtzlbbf_javasdktest";
-    private static String apiKey = "test_al4054nd7402ju9j2igtzlbbf_javasdktest";
-    // private static String secret = System.getenv("API_SECRET");
-    private static String secret = "8EKTe7ujtEhq6BJ7jJmV5U5Lg2I51U66o3Zf2mubbld";
+    private static String apiKey = System.getenv("API_KEY");
+    private static String secret = System.getenv("API_SECRET");
 
     private static OkHttpClient client;
+    private static GeneralSMA sma;
 
     static {
         try {
-            client = getPersistingClient(apiKey, secret, new GeneralSMA(), new SqliteStrategy(new File("/tmp")));
+            sma = new GeneralSMA();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        try {
+            client = getPersistingClient(apiKey, secret, sma, new SqliteStrategy(new File("/tmp")));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,6 +53,7 @@ public class ClientTests {
     @Test
     public void instantiateClient() {
         assertNotNull(this.client);
+        assertNotNull(this.sma);
     }
 
     @Test
@@ -176,24 +182,43 @@ public class ClientTests {
         assertEquals(200, txResponse.code());
     }
 
-    @Test
+    @Test (expected = ProtocolException.class)
     public void faultyAuthenticationShouldPersist() throws SQLException, IOException {
         final String directoryId = UUID.randomUUID().toString();
+        final String requestUrl = "https://kassensichv.io/api/v0/tss";
+
+        final File directory = new File(System.getProperty("java.io.tmpdir") + File.separator + directoryId);
+        final boolean created = directory.mkdir();
+
+        assertTrue(created);
+
+        final PersistenceStrategy strategy = new SqliteStrategy(directory);
 
         OkHttpClient faultyClient = ClientFactory.getPersistingClient("invalid", "also-invalid",
-                new GeneralSMA(), new SqliteStrategy(new File("/tmp/" + UUID.randomUUID())));
+                sma, strategy);
 
         // List TSS request
         final Request request = new Request
                 .Builder()
-                .url("https://kassensichv.io/api/v0/tss")
+                .url(requestUrl)
                 .get()
                 .build();
+
+        System.out.println("built client and request");
 
         final Response response = faultyClient
                 .newCall(request)
                 .execute();
 
-        // clean up
+        List<com.fiskaly.kassensichv.client.persistence.Request> requests =
+                strategy.loadRequests();
+
+        assertTrue(requests.size() == 1);
+
+        com.fiskaly.kassensichv.client.persistence.Request persisted = requests.get(0);
+
+        assertEquals("", persisted.getBody());
+        assertEquals("GET", persisted.getMethod());
+        assertEquals(requestUrl, persisted.getUrl());
     }
 }
