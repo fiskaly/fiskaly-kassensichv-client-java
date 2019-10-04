@@ -25,7 +25,7 @@ The integration process differs a little depending on your target
 platform. Because we need to provide you with a platform specific SMA
 implementation, there are 2 different implementations of the SMA interface.
 One for all standard JVM platforms (e.g. desktop) and another one
-for Android (ARM).
+for Android devices. 
 
 The JAR files described in the section above contain the right SMA
 implementation for your target platform. Therefore, all you'll need to
@@ -56,7 +56,6 @@ OkHttpClient client = ClientFactory.getClient(
 );
 ```
 
-You can find all examples within the `RequestFactory` class.
 ### Creating a TSS
 The following code snippet illustrates how to create a basic
 TSS.
@@ -146,7 +145,7 @@ Map<String, Object> transactionMap = objectMapper
         new TypeReference<Map<String,Object>>() {});
 
 int start = (int) transactionMap.get("time_start");
-String end = (String) transactionMap.get("end");
+int end = (int) transactionMap.get("time_end");
 int signatureCounter = (int) ((Map) transactionMap.get("signature")).get("counter"));
 int transactionCounter = (int) transactionMap.get("number");
 String certificateSerial = (String) transactionMap.get("certificate_serial");
@@ -189,4 +188,11 @@ Map<String, Object> exportMap = objectMapper
 
 // Link to the generated TAR file
 String exportLink = exportMap.get("href");
+
+Request retrieveTar = new Request.Builder()
+        .url(exportLink)
+        .get()
+        .build();
+
+// Execute request and further process the file
 ```
