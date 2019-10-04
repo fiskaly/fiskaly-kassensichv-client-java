@@ -8,6 +8,8 @@ library for Java. This means you will have to look up the
 how this client is used. From a developer's point of view, the only difference
 is that you have to instantiate your OkHttpClient through the ```ClientFactory``` provided by the SDK.
 
+Be sure to have a look at our [integration guide / tutorial](https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/tutorial.md).
+
 ## Features
 
 - [X] Automatic authentication handling (fetch/refresh JWT and re-authenticate upon 401 errors).
@@ -37,6 +39,7 @@ Each built library will be available at ```<sub-project-name>/build/libs/<sub-pr
 
 
 ## Integration
+
 To integrate the client into your project, use the appropriate client build for your target platform.
 
 * `client/build/libs/com.fiskaly.kassensichv.client.general-<version>.jar` for standard Java platforms
