@@ -1,0 +1,1 @@
+include ':app', ':com.fiskaly.kassensichv.sma', ':fiskaly-kassensichv-client.jar-0.0.1-alpha', ':client', ':sma', ':sma-android'
