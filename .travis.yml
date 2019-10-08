@@ -1,0 +1,5 @@
+language: java
+
+jdks:
+  - openjdk8
+  - openjdk7
