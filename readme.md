@@ -1,6 +1,6 @@
 # fiskaly KassenSichV client for Java
 
-[![Build Status]()https://travis-ci.org/fiskaly/fiskaly-kassensichv-client-java.svg?branch=master](https://travis-ci.org/joaomlneto/travis-ci-tutorial-java)
+[![Build Status](https://travis-ci.org/fiskaly/fiskaly-kassensichv-client-java.svg?branch=master)](https://travis-ci.org/fiskaly/fiskaly-kassensichv-client-java)
 
 The fiskaly KassenSichV client is an HTTP client that is needed<sup>[1](#fn1)</sup> for accessing the [kassensichv.io](https://kassensichv.io) API that implements a cloud-based, virtual **CTSS** (~Certified~ Technical Security System) / **TSE** (Technische Sicherheitseinrichtung) as defined by the German **KassenSichV** ([Kassen­sich­er­ungsver­ord­nung](https://www.bundesfinanzministerium.de/Content/DE/Downloads/Gesetze/2017-10-06-KassenSichV.pdf)).
 
