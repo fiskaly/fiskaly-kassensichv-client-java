@@ -1,5 +1,5 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiskaly.kassensichv.sma.GeneralSMA;
+import com.fiskaly.kassensichv.sma.GeneralSMAImplementation;
 import okhttp3.*;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class ClientTests {
 
     static {
         try {
-            client = getClient(apiKey, secret, new GeneralSMA());
+            client = getClient(apiKey, secret, new GeneralSMAImplementation());
         } catch (IOException e) {
             e.printStackTrace();
         }

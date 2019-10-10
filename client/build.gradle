@@ -21,20 +21,20 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
 
-    implementation project(':sma-common')
-    implementation project(':sma-general')
-    implementation project(':sma-android')
+    implementation project(':common')
+    implementation project(':general')
+    implementation project(':android')
 
-    testCompile project(':sma-common')
-    testCompile project(':sma-general')
-    testCompile project(':sma-android')
+    testCompile project(':common')
+    testCompile project(':general')
+    testCompile project(':android')
 
-    generalLibs project(':sma-general')
+    generalLibs project(':general')
     generalLibs group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
 
-    androidLibs project(':sma-android')
+    androidLibs project(':android')
 
-    commonLibs project(':sma-common')
+    commonLibs project(':common')
 
     compile (
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
