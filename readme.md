@@ -87,6 +87,19 @@ public class Main {
 }
 ```
 
+### Enable Offline Functionality (Beta)
+
+To enable offline functionality, use this factory call to instantiate an OkHttpClient:
+
+```java
+OkHttpClient betaClient = ClientFactory.getPersistingClient(apiKey, secret, sma, persistenceStrategy);
+```
+
+The `PersistanceStrategy` interface defines a contract for a concrete persistence implementation 
+(read more about the strategy pattern [here](https://en.wikipedia.org/wiki/Strategy_pattern)).
+
+A demo implementation for standard JVM platforms based on SQLite can be found in `com.fiskaly.kassensichv.general.persistance.SqliteStrategy.java`
+
 ## Related
 
 - [fiskaly.com](https://fiskaly.com)
