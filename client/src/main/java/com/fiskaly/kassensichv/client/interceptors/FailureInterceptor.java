@@ -9,7 +9,6 @@ import persistence.PersistenceStrategy;
 
 import java.io.IOException;
 import java.net.ProtocolException;
-import java.util.List;
 
 public class FailureInterceptor implements Interceptor {
     private PersistenceStrategy strategy;
@@ -38,13 +37,8 @@ public class FailureInterceptor implements Interceptor {
             }
 
             this.strategy.persistRequest(
-                    new com.fiskaly.kassensichv.client.persistence
-                            .Request(request.url().toString(), body, request.method())
+                    new persistence.Request(request.url().toString(), body, request.method())
             );
-
-            List<com.fiskaly.kassensichv.client.persistence.Request> requests = this.strategy.loadRequests();
-
-            requests.forEach(System.out::println);
 
             throw e;
         }
