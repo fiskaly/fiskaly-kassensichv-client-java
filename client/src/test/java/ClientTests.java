@@ -1,10 +1,10 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiskaly.kassensichv.client.ClientFactory;
-import com.fiskaly.kassensichv.client.persistence.PersistenceStrategy;
-import com.fiskaly.kassensichv.client.persistence.SqliteStrategy;
-import com.fiskaly.kassensichv.sma.GeneralSMA;
+import com.fiskaly.kassensichv.sma.GeneralSMAImplementation;
 import okhttp3.*;
 import org.junit.Test;
+import persistence.PersistenceStrategy;
+import persistence.SqliteStrategy;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,15 +26,9 @@ public class ClientTests {
     private static String secret = System.getenv("API_SECRET");
 
     private static OkHttpClient client;
-    private static GeneralSMA sma;
+    private static GeneralSMAImplementation sma;
 
     static {
-        try {
-            sma = new GeneralSMA();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         try {
             client = getPersistingClient(apiKey, secret, sma, new SqliteStrategy(new File("/tmp")));
         } catch (SQLException e) {
@@ -210,12 +204,12 @@ public class ClientTests {
                 .newCall(request)
                 .execute();
 
-        List<com.fiskaly.kassensichv.client.persistence.Request> requests =
+        List<persistence.Request> requests =
                 strategy.loadRequests();
 
         assertTrue(requests.size() == 1);
 
-        com.fiskaly.kassensichv.client.persistence.Request persisted = requests.get(0);
+        persistence.Request persisted = requests.get(0);
 
         assertEquals("", persisted.getBody());
         assertEquals("GET", persisted.getMethod());

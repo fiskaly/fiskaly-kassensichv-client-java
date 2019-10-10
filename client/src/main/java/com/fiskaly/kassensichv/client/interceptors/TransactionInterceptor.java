@@ -2,7 +2,7 @@ package com.fiskaly.kassensichv.client.interceptors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiskaly.kassensichv.sma.SMA;
+import com.fiskaly.kassensichv.sma.SMAImplementation;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -22,13 +22,13 @@ import java.util.Map;
 /**
  * Intercepts requests that target the transaction resource
  * and swaps the request body with a version that's signed
- * by the passed SMA implementation
+ * by the passed SMAImplementation implementation
  */
 public class TransactionInterceptor implements Interceptor {
-    private final SMA sma;
+    private final SMAImplementation sma;
     private final ObjectMapper mapper;
 
-    public TransactionInterceptor(SMA sma) {
+    public TransactionInterceptor(SMAImplementation sma) {
         this.sma = sma;
         this.mapper = new ObjectMapper();
     }

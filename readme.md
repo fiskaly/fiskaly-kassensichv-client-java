@@ -8,12 +8,14 @@ library for Java. This means you will have to look up the
 how this client is used. From a developer's point of view, the only difference
 is that you have to instantiate your OkHttpClient through the ```ClientFactory``` provided by the SDK.
 
+Be sure to have a look at our [integration guide / tutorial](https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/tutorial.md).
+
 ## Features
 
 - [X] Automatic authentication handling (fetch/refresh JWT and re-authenticate upon 401 errors).
 - [X] Automatic retries on failures (server errors or network timeouts/issues).
 - [ ] Automatic JSON parsing and serialization of request and response bodies.
-- [ ] Future: [<a name="fn1">1</a>] compliance regarding [BSI CC-PP-0105-2019](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Zertifizierung/Reporte/ReportePP/pp0105b_pdf.pdf?__blob=publicationFile&v=7) which mandates a locally executed SMA component for creating signed log messages. Note: this SMA component will be bundled within this package as a binary shared library in a future release. Currently it's a dummy JavaScript implementation.
+- [X] Future: [<a name="fn1">1</a>] compliance regarding [BSI CC-PP-0105-2019](https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Zertifizierung/Reporte/ReportePP/pp0105b_pdf.pdf?__blob=publicationFile&v=7) which mandates a locally executed SMA component for creating signed log messages. 
 - [ ] Future: Automatic offline-handling (collection and documentation according to [Anwendungserlass zu § 146a AO](https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Weitere_Steuerthemen/Abgabenordnung/AO-Anwendungserlass/2019-06-17-einfuehrung-paragraf-146a-AO-anwendungserlass-zu-paragraf-146a-AO.pdf?__blob=publicationFile&v=1))
 
 ## Build project
@@ -37,6 +39,7 @@ Each built library will be available at ```<sub-project-name>/build/libs/<sub-pr
 
 
 ## Integration
+
 To integrate the client into your project, use the appropriate client build for your target platform.
 
 * `client/build/libs/com.fiskaly.kassensichv.client.general-<version>.jar` for standard Java platforms
@@ -83,6 +86,19 @@ public class Main {
   }
 }
 ```
+
+### Enable Offline Functionality (Beta)
+
+To enable offline functionality, use this factory call to instantiate an OkHttpClient:
+
+```java
+OkHttpClient betaClient = ClientFactory.getPersistingClient(apiKey, secret, sma, persistenceStrategy);
+```
+
+The `PersistanceStrategy` interface defines a contract for a concrete persistence implementation 
+(read more about the strategy pattern [here](https://en.wikipedia.org/wiki/Strategy_pattern)).
+
+A demo implementation for standard JVM platforms based on SQLite can be found in `com.fiskaly.kassensichv.general.persistance.SqliteStrategy.java`
 
 ## Related
 
