@@ -39,6 +39,7 @@ Each built library will be available at ```<sub-project-name>/build/libs/<sub-pr
 
 
 ## Integration
+Be sure to have a look at our [integration guide / tutorial](https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/tutorial.md).
 
 To integrate the client into your project, use the appropriate client build for your target platform.
 
