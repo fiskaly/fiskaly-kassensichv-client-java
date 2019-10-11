@@ -19,11 +19,14 @@ public class SmaLoaderTest {
         String libraryName = SmaLoader.buildLibraryName();
 
         assertTrue(libraryName.contains("com.fiskaly.kassensichv.sma"));
-        assertEquals("com.fiskaly.kassensichv.sma-"
+
+        String should = "com.fiskaly.kassensichv.sma-"
                 + SmaLoader.OS_WINDOWS
                 + "-"
                 + SmaLoader.SMA_LIB_32
-                + ".dll", libraryName);
+                + ".dll";
+
+        assertEquals(should, libraryName);
     }
 
     @Test
