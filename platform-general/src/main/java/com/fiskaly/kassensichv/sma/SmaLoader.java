@@ -14,9 +14,12 @@ public class SmaLoader {
     private static Map<String, String> extensions;
     private static Map<String, String> architectures;
 
-    private static final String OS_WINDOWS = "windows";
-    private static final String OS_LINUX = "linux";
-    private static final String OS_OSX = "darwin";
+    static final String OS_WINDOWS = "windows";
+    static final String OS_LINUX = "linux";
+    static final String OS_OSX = "darwin";
+
+    static final String SMA_LIB_32 = "386";
+    static final String SMA_LIB_64 = "amd64";
 
     static {
         extensions = new HashMap<>();
@@ -27,9 +30,10 @@ public class SmaLoader {
 
         architectures = new HashMap<>();
 
-        architectures.put("x86_64", "amd64");
-        architectures.put("amd64", "amd64");
-        architectures.put("x32", "386");
+        architectures.put("x86_64", SMA_LIB_64);
+        architectures.put("amd64", SMA_LIB_64);
+        architectures.put("x32", SMA_LIB_32);
+        architectures.put("i386", SMA_LIB_32);
     }
 
     private static String getOSName() {
@@ -77,11 +81,11 @@ public class SmaLoader {
         }
     }
 
-    private static String buildLibraryName() {
+    static String buildLibraryName() {
         String osArchitecture = System.getProperty("os.arch");
         String osName = getOSName();
         String libArchitecture = architectures.containsKey(osArchitecture) ?
-                architectures.get(osArchitecture) : architectures.get("386");
+                architectures.get(osArchitecture) : architectures.get("x32");
         String libExtension = extensions.get(osName);
 
         return "com.fiskaly.kassensichv.sma-" + osName + "-" + libArchitecture + libExtension;
