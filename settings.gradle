@@ -1,6 +1,6 @@
 rootProject.name = 'fiskaly-kassensichv-client'
-include ':android'
-include ':general'
+include ':platform-android'
+include ':platform-general'
 include ':client'
-include ':common'
+include ':platform-common'
 

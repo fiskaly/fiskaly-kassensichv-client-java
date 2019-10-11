@@ -13,5 +13,5 @@ repositories {
 
 dependencies {
     compile group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
-    implementation project(':common')
+    implementation project(':platform-common')
 }
