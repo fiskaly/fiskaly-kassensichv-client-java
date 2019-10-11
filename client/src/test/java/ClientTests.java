@@ -1,14 +1,21 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiskaly.kassensichv.client.ClientFactory;
+import com.fiskaly.kassensichv.persistence.PersistenceStrategy;
+import com.fiskaly.kassensichv.persistence.SqliteStrategy;
 import com.fiskaly.kassensichv.sma.GeneralSMA;
 import okhttp3.*;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.ProtocolException;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.fiskaly.kassensichv.client.ClientFactory.*;
+import static com.fiskaly.kassensichv.client.ClientFactory.getPersistingClient;
 import static org.junit.Assert.*;
 
 /**
@@ -19,10 +26,14 @@ public class ClientTests {
     private static String secret = System.getenv("API_SECRET");
 
     private static OkHttpClient client;
+    private static GeneralSMA sma;
 
     static {
         try {
-            client = getClient(apiKey, secret, new GeneralSMA());
+            client = getPersistingClient(apiKey, secret, sma, new SqliteStrategy(new File("/tmp")));
+            sma = new GeneralSMA();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,6 +50,7 @@ public class ClientTests {
     @Test
     public void instantiateClient() {
         assertNotNull(this.client);
+        assertNotNull(this.sma);
     }
 
     @Test
@@ -165,5 +177,45 @@ public class ClientTests {
                 .execute();
 
         assertEquals(200, txResponse.code());
+    }
+
+    @Test (expected = ProtocolException.class)
+    public void faultyAuthenticationShouldPersist() throws SQLException, IOException {
+        final String directoryId = UUID.randomUUID().toString();
+        final String requestUrl = "https://kassensichv.io/api/v0/tss";
+
+        final File directory = new File(System.getProperty("java.io.tmpdir") + File.separator + directoryId);
+        final boolean created = directory.mkdir();
+
+        assertTrue(created);
+
+        final PersistenceStrategy strategy = new SqliteStrategy(directory);
+
+        OkHttpClient faultyClient = ClientFactory.getPersistingClient("invalid", "also-invalid",
+                sma, strategy);
+
+        // List TSS request
+        final Request request = new Request
+                .Builder()
+                .url(requestUrl)
+                .get()
+                .build();
+
+        System.out.println("built client and request");
+
+        final Response response = faultyClient
+                .newCall(request)
+                .execute();
+
+        List<com.fiskaly.kassensichv.persistence.Request> requests =
+                strategy.loadRequests();
+
+        assertTrue(requests.size() == 1);
+
+        com.fiskaly.kassensichv.persistence.Request persisted = requests.get(0);
+
+        assertEquals("", persisted.getBody());
+        assertEquals("GET", persisted.getMethod());
+        assertEquals(requestUrl, persisted.getUrl());
     }
 }
