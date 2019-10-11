@@ -1,4 +1,4 @@
-package persistence;
+package com.fiskaly.kassensichv.persistence;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,4 +1,4 @@
-package persistence;
+package com.fiskaly.kassensichv.persistence;
 
 public class Request {
     private String url;

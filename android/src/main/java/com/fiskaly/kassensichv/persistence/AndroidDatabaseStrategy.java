@@ -1,11 +1,11 @@
-package persistence;
+package com.fiskaly.kassensichv.persistence;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.util.List;
 
-public class AndroidDatabaseStrategy implements PersistenceStrategy{
+public class AndroidDatabaseStrategy implements PersistenceStrategy {
     public AndroidDatabaseStrategy() {}
 
     @Override
