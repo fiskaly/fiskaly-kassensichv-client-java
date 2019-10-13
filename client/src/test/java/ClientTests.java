@@ -3,6 +3,7 @@ import com.fiskaly.kassensichv.client.ClientFactory;
 import com.fiskaly.kassensichv.persistence.PersistenceStrategy;
 import com.fiskaly.kassensichv.persistence.SqliteStrategy;
 import com.fiskaly.kassensichv.sma.GeneralSMA;
+import com.fiskaly.kassensichv.sma.SMAInterface;
 import okhttp3.*;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.fiskaly.kassensichv.client.ClientFactory.getClient;
 import static com.fiskaly.kassensichv.client.ClientFactory.getPersistingClient;
 import static org.junit.Assert.*;
 
@@ -30,8 +32,8 @@ public class ClientTests {
 
     static {
         try {
-            client = getPersistingClient(apiKey, secret, sma, new SqliteStrategy(new File("/tmp")));
             sma = new GeneralSMA();
+            client = getPersistingClient(apiKey, secret, sma, new SqliteStrategy(new File("/tmp")));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -217,5 +219,242 @@ public class ClientTests {
         assertEquals("", persisted.getBody());
         assertEquals("GET", persisted.getMethod());
         assertEquals(requestUrl, persisted.getUrl());
+    }
+
+    @Test
+    public void smaReturnsNull() throws IOException {
+        class FaultySMA implements SMAInterface {
+            @Override
+            public String invoke(String payload) {
+                return null;
+            }
+        }
+
+        final OkHttpClient faultyClient = getClient(apiKey, secret, new FaultySMA());
+
+        Map<String, String> tssMap = new HashMap<>();
+
+        tssMap.put("state", "INITIALIZED");
+        tssMap.put("description", "TSS created by test case createTSS");
+
+        String jsonBody = mapper.writeValueAsString(tssMap);
+
+        RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
+        UUID tssId = UUID.randomUUID();
+
+        final Request request = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId)
+                .put(body)
+                .build();
+
+        final Response response = faultyClient
+                .newCall(request)
+                .execute();
+
+        assertEquals(200, response.code());
+
+        UUID clientId = UUID.randomUUID();
+
+        RequestBody clientBody = RequestBody.create(
+                "{ \"serial_number\": " + "\"" + clientId + "\" }"
+                , MediaType.parse("application/json"));
+
+        final Request clientRequest = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId + "/client/" + clientId)
+                .put(clientBody)
+                .build();
+
+        final Response clientResponse = faultyClient
+                .newCall(clientRequest)
+                .execute();
+
+        assertEquals(200, clientResponse.code());
+
+        UUID txId = UUID.randomUUID();
+
+        Map<String, Object> txMap = new HashMap<>();
+
+        Map<String,  String> dataMap = new HashMap<>();
+        dataMap.put("binary", "dGVzdA==");
+
+        txMap.put("type", "RECEIPT");
+        txMap.put("state", "ACTIVE");
+        txMap.put("client_id", clientId.toString());
+        txMap.put("data", dataMap);
+
+        String txBodyJson = mapper.writeValueAsString(txMap);
+        RequestBody txBody = RequestBody.create(txBodyJson, MediaType.parse("application/json"));
+
+        final Request txRequest = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId + "/tx/" + txId)
+                .put(txBody)
+                .build();
+
+        final Response txResponse = faultyClient
+                .newCall(txRequest)
+                .execute();
+
+        assertEquals(200, txResponse.code());
+    }
+
+    @Test
+    public void smaReturnsEmptyString() throws IOException {
+        class FaultySMA implements SMAInterface {
+            @Override
+            public String invoke(String payload) {
+                return "";
+            }
+        }
+
+        final OkHttpClient faultyClient = getClient(apiKey, secret, new FaultySMA());
+
+        Map<String, String> tssMap = new HashMap<>();
+
+        tssMap.put("state", "INITIALIZED");
+        tssMap.put("description", "TSS created by test case createTSS");
+
+        String jsonBody = mapper.writeValueAsString(tssMap);
+
+        RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
+        UUID tssId = UUID.randomUUID();
+
+        final Request request = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId)
+                .put(body)
+                .build();
+
+        final Response response = faultyClient
+                .newCall(request)
+                .execute();
+
+        assertEquals(200, response.code());
+
+        UUID clientId = UUID.randomUUID();
+
+        RequestBody clientBody = RequestBody.create(
+                "{ \"serial_number\": " + "\"" + clientId + "\" }"
+                , MediaType.parse("application/json"));
+
+        final Request clientRequest = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId + "/client/" + clientId)
+                .put(clientBody)
+                .build();
+
+        final Response clientResponse = faultyClient
+                .newCall(clientRequest)
+                .execute();
+
+        assertEquals(200, clientResponse.code());
+
+        UUID txId = UUID.randomUUID();
+
+        Map<String, Object> txMap = new HashMap<>();
+
+        Map<String,  String> dataMap = new HashMap<>();
+        dataMap.put("binary", "dGVzdA==");
+
+        txMap.put("type", "RECEIPT");
+        txMap.put("state", "ACTIVE");
+        txMap.put("client_id", clientId.toString());
+        txMap.put("data", dataMap);
+
+        String txBodyJson = mapper.writeValueAsString(txMap);
+        RequestBody txBody = RequestBody.create(txBodyJson, MediaType.parse("application/json"));
+
+        final Request txRequest = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId + "/tx/" + txId)
+                .put(txBody)
+                .build();
+
+        final Response txResponse = faultyClient
+                .newCall(txRequest)
+                .execute();
+
+        assertEquals(200, txResponse.code());
+    }
+
+    @Test
+    public void smaReturnsEmptyObject() throws IOException {
+        class FaultySMA implements SMAInterface {
+            @Override
+            public String invoke(String payload) {
+                return "";
+            }
+        }
+
+        final OkHttpClient faultyClient = getClient(apiKey, secret, new FaultySMA());
+
+        Map<String, String> tssMap = new HashMap<>();
+
+        tssMap.put("state", "INITIALIZED");
+        tssMap.put("description", "TSS created by test case createTSS - empty string");
+
+        String jsonBody = mapper.writeValueAsString(tssMap);
+
+        RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
+        UUID tssId = UUID.randomUUID();
+
+        final Request request = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId)
+                .put(body)
+                .build();
+
+        final Response response = faultyClient
+                .newCall(request)
+                .execute();
+
+        assertEquals(200, response.code());
+
+        UUID clientId = UUID.randomUUID();
+
+        RequestBody clientBody = RequestBody.create(
+                "{ \"serial_number\": " + "\"" + clientId + "\" }"
+                , MediaType.parse("application/json"));
+
+        final Request clientRequest = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId + "/client/" + clientId)
+                .put(clientBody)
+                .build();
+
+        final Response clientResponse = faultyClient
+                .newCall(clientRequest)
+                .execute();
+
+        assertEquals(200, clientResponse.code());
+
+        UUID txId = UUID.randomUUID();
+
+        Map<String, Object> txMap = new HashMap<>();
+
+        Map<String,  String> dataMap = new HashMap<>();
+        dataMap.put("binary", "dGVzdA==");
+
+        txMap.put("type", "RECEIPT");
+        txMap.put("state", "ACTIVE");
+        txMap.put("client_id", clientId.toString());
+        txMap.put("data", dataMap);
+
+        String txBodyJson = mapper.writeValueAsString(txMap);
+        RequestBody txBody = RequestBody.create(txBodyJson, MediaType.parse("application/json"));
+
+        final Request txRequest = new Request
+                .Builder()
+                .url("https://kassensichv.io/api/v0/tss/" + tssId + "/tx/" + txId)
+                .put(txBody)
+                .build();
+
+        final Response txResponse = faultyClient
+                .newCall(txRequest)
+                .execute();
+
+        assertEquals(200, txResponse.code());
     }
 }
