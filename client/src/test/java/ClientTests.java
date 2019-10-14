@@ -199,8 +199,6 @@ public class ClientTests {
                 .get()
                 .build();
 
-        System.out.println("built client and request");
-
         final Response response = faultyClient
                 .newCall(request)
                 .execute();
