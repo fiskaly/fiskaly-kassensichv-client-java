@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.fiskaly.kassensichv.client.ClientFactory.getClient;
-import static com.fiskaly.kassensichv.client.ClientFactory.getPersistingClient;
 import static org.junit.Assert.*;
 
 /**
@@ -33,9 +32,7 @@ public class ClientTests {
     static {
         try {
             sma = new GeneralSMA();
-            client = getPersistingClient(apiKey, secret, sma, new SqliteStrategy(new File("/tmp")));
-        } catch (SQLException e) {
-            e.printStackTrace();
+            client = getClient(apiKey, secret, sma);
         } catch (IOException e) {
             e.printStackTrace();
         }
