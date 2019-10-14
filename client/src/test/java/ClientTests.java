@@ -30,7 +30,7 @@ public class ClientTests {
 
     static {
         try {
-            sma = new GeneralSMA();
+            sma = SmaProvider.getSma();
             client = getClient(apiKey, secret, sma);
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,14 +41,14 @@ public class ClientTests {
 
     @Test
     public void environment() {
-        assertNotNull(this.apiKey);
-        assertNotNull(this.secret);
+        assertNotNull(apiKey);
+        assertNotNull(secret);
     }
 
     @Test
     public void instantiateClient() {
-        assertNotNull(this.client);
-        assertNotNull(this.sma);
+        assertNotNull(client);
+        assertNotNull(sma);
     }
 
     @Test
@@ -201,7 +201,7 @@ public class ClientTests {
 
         System.out.println("built client and request");
 
-        final Response response = faultyClient
+        faultyClient
                 .newCall(request)
                 .execute();
 
