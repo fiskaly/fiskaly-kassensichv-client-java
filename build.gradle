@@ -1,16 +1,5 @@
-plugins {
-    id 'java'
-    id 'application'
-}
-
 group 'com.fiskaly'
 version '0.0.1-alpha'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
 
 subprojects {
     apply plugin: 'java'
@@ -19,6 +8,4 @@ subprojects {
         mavenCentral()
     }
 }
-
-dependencies { }
 
