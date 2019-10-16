@@ -386,7 +386,7 @@ public class ApiCodeExamplesTests {
     // final String tssId = "...";
     final String BASE_URL = "https://kassensichv.io/api/v0/";
     final String payload = new JSONObject()
-      .put("state", "DISABLED")
+      .put("state", "INITIALIZED")
       .toString();
     final RequestBody body = RequestBody.create(payload, MediaType.parse("application/json"));
     final Request request = new Request.Builder()
