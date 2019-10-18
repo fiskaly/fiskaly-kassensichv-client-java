@@ -5,8 +5,6 @@ plugins {
 group 'com.fiskaly'
 version '0.0.1-alpha'
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
@@ -16,4 +14,14 @@ dependencies {
     implementation project(':platform-common')
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    baseName = 'com.fiskaly.kassensichv.platform-general'
+
+    from ('../sma/dist/') {
+        include 'com.fiskaly.kassensichv.sma-darwin-*'
+        include 'com.fiskaly.kassensichv.sma-windows-*'
+        include 'com.fiskaly.kassensichv.sma-linux-*'
+    }
 }
