@@ -6,25 +6,17 @@ dependencies {
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
 
     implementation project(':platform-common')
-    implementation project(':platform-general')
-    implementation project(':platform-android')
 
     testCompile project(':platform-common')
     testCompile project(':platform-general')
-    testCompile project(':platform-android')
 
-    project(':platform-general')
-    compile group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
+    implementation project(':platform-common')
 
-    compile project(':platform-common')
-
-    compile (
+    implementation (
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9']
     )
-
-    implementation group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
 }
 
 jar {
