@@ -1,13 +1,5 @@
-plugins {
-    id 'java'
-}
-
 group 'com.fiskaly'
 version '0.0.1-alpha'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compile group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
