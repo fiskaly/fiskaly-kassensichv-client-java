@@ -9,6 +9,12 @@ This project is a demo application that does the following:
 
 In case of the exit code being 0, the client successfully issued all requests.
 
+## Setup
+The demo application depends on the client being available as a fat JAR in the `libs` directory. 
+
+
+Build instructions for the client can be found in the [https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/readme.md](readme.md) in the project root.
+
 ## Build instructions
 Use the following command to create a self-contained ("fat JAR") JAR.
 
