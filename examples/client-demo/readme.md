@@ -18,7 +18,7 @@ $ ./gradlew shadowJar
 ```
 
 
-This will create a fat JAR located at `./build/libs/client-demo-1.0-SNAPSHOT-all.jar`.
+The resulting fat JAR will reside at `./build/libs/client-demo-1.0-SNAPSHOT-all.jar`.
 
 ## Running the demo application
 In order to run the application, use the following command.
