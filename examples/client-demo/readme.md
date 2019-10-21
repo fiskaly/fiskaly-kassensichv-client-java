@@ -16,7 +16,7 @@ The demo application depends on the client being available as a fat JAR in the `
 Build instructions for the client can be found in the [readme.md](https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/readme.md) in the project root.
 
 ## Build instructions
-Use the following command to create a self-contained ("fat JAR") JAR.
+Use the following command to create a self-contained ("fat") JAR.
 
 
 ```
