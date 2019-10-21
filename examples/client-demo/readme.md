@@ -36,7 +36,7 @@ $ export API_KEY=<your-api-key>
 $ export API_SECRET=<your-api-secret>
 ```
 
-After these have been set, you can run the application, use the following command.
+After these have been set, you can run the application using the following command.
 
 ```
 $ java -jar client-demo-1.0-SNAPSHOT-all.jar.jar
