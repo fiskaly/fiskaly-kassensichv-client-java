@@ -27,8 +27,16 @@ $ ./gradlew shadowJar
 The resulting fat JAR will reside at `./build/libs/client-demo-1.0-SNAPSHOT-all.jar`.
 
 ## Running the demo application
-In order to run the application, use the following command.
+Firstly, values for the following environment variables have to be set: 
+- `API_KEY`
+- `API_SECRET`
 
+```
+$ export API_KEY=<your-api-key>
+$ export API_SECRET=<your-api-secret>
+```
+
+After these have been set, you can run the application, use the following command.
 
 ```
 $ java -jar client-demo-1.0-SNAPSHOT-all.jar.jar
