@@ -36,3 +36,6 @@ bin
 # Client
 client/**/*.so
 client/**/*.dll
+
+# Visual Studio Code
+.vscode/

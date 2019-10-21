@@ -43,6 +43,8 @@ dependencies {
     )
 
     compile group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
+
+    compile group: 'org.json', name: 'json', version: '20190722'
 }
 
 task buildAndroid (type: Jar){
