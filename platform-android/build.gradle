@@ -1,17 +1,5 @@
-plugins {
-    id 'java'
-    id 'application'
-}
-
 group 'com.fiskaly'
 version '0.0.1-alpha'
-
-sourceCompatibility = 1.8
-
-
-repositories {
-    mavenCentral()
-}
 
 configurations {
     mobileLibrary
@@ -23,7 +11,7 @@ dependencies {
     mobileLibrary files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
 }
 
-task copyFiles (type: Copy) {
+task copyAndroidDependencies {
     def basePath = 'build/sma-unpacked/'
     def smaAndroidBasePath = 'src/main/'
     def aarPath = '../sma/dist/com.fiskaly.kassensichv.sma-android.aar'
@@ -50,6 +38,8 @@ task copyFiles (type: Copy) {
 }
 
 jar {
+    baseName = 'com.fiskaly.kassensichv.platform-android'
+
     from {
         configurations.mobileLibrary.collect { it.isDirectory() ? it : zipTree(it) }
     }

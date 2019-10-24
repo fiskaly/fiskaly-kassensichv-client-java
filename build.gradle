@@ -1,24 +1,40 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
     id 'java'
-    id 'application'
 }
 
 group 'com.fiskaly'
 version '0.0.1-alpha'
 
-sourceCompatibility = 1.8
+subprojects {
+    apply plugin: 'java'
+
+    apply {
+        repositories {
+            mavenCentral()
+        }
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
-subprojects {
-    apply plugin: 'java'
+def target = System.properties.getProperty("target")
 
-    repositories {
-        mavenCentral()
+dependencies {
+    if (target == "general") {
+        implementation project(':platform-general')
     }
+
+    if (target == "android") {
+        implementation project(':platform-android')
+    }
+
+    implementation project(':platform-common')
+    implementation project(':client')
 }
 
-dependencies { }
-
+shadowJar {
+    baseName = "com.fiskaly.kassensichv.client-" + target
+}
