@@ -17,8 +17,8 @@ within the `fiskaly-kassensichv-client-java` directory:
 
 This will create two Fat-JAR files containing everything you'll need.
 
-* `client/build/libs/com.fiskaly.kassensichv.client.general-<version>-all.jar` for standard Java platforms
-* `client/build/libs/com.fiskaly.kassensichv.client.android-<version>-all.jar` for Android
+* `./build/libs/com.fiskaly.kassensichv.client.general-<version>-all.jar` for standard Java platforms
+* `./build/libs/com.fiskaly.kassensichv.client.android-<version>-all.jar` for Android
 
 ## Setup and integration
 The integration process differs a little depending on your target

@@ -35,7 +35,7 @@ $ ./gradlew shadowJar -Dtarget=<general|android>
 
 This will create a Fat-JAR / Uber-JAR for the client targeting either standard JVM platforms (`general`) or Android (`android`) that can be integrated into your project.
 
-The built library will be available at ```client/build/libs/com.fiskaly.kassensichv.client.<platform>-<version>-all.jar```.
+The built library will be available at ```./build/libs/com.fiskaly.kassensichv.client.<platform>-<version>-all.jar```.
 
 
 ## Integration
