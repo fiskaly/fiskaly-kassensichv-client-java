@@ -56,7 +56,16 @@ public class TransactionInterceptor implements Interceptor {
         List<String> parts = new LinkedList<>(Arrays.asList(sourceUrl.split("\\?")));
 
         String host = parts.remove(0);
-        String queryList = String.join("?", parts);
+
+        String queryList = "";
+
+        if(!parts.isEmpty()){
+            queryList += parts.remove(0);
+
+            for (String part : parts) {
+                queryList += ("?" + part);
+            }
+        }
 
         if (!queryList.isEmpty()) {
             queryList = "?" + queryList;
