@@ -30,12 +30,12 @@ The project uses [Gradle](https://gradle.org/) as a build and dependency managem
 In order to build the project, use the following command:
 
 ```
-$ ./gradlew jar
+$ ./gradlew shadowJar -Dtarget=<general|android>
 ```
 
-This will result in multiple JAR-files for each sub-project that can be used in your project.
+This will create a Fat-JAR / Uber-JAR for the client targeting either standard JVM platforms (`general`) or Android (`android`) that can be integrated into your project.
 
-Each built library will be available at ```<sub-project-name>/build/libs/<sub-project-name>-<version>.jar```.
+The built library will be available at ```client/build/libs/com.fiskaly.kassensichv.client.<platform>-<version>-all.jar```.
 
 
 ## Integration
