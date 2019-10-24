@@ -4,10 +4,10 @@ import jnr.ffi.Pointer;
 
 import java.io.IOException;
 
-public class GeneralSMA implements SMAInterface {
+public class GeneralSma implements SmaInterface {
     private SmaLibrary library;
 
-    public GeneralSMA() throws IOException {
+    public GeneralSma() throws IOException {
         this.library = SmaLoader.load();
     }
 

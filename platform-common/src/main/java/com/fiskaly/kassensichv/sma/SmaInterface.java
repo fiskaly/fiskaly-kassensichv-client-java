@@ -1,5 +1,5 @@
 package com.fiskaly.kassensichv.sma;
 
-public interface SMAInterface {
+public interface SmaInterface {
      String invoke(String payload);
 }

@@ -2,7 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiskaly.kassensichv.client.ClientFactory;
 import com.fiskaly.kassensichv.persistence.PersistenceStrategy;
 import com.fiskaly.kassensichv.persistence.SqliteStrategy;
-import com.fiskaly.kassensichv.sma.GeneralSMA;
+import com.fiskaly.kassensichv.sma.GeneralSma;
 import okhttp3.*;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class ClientTests {
     private static String secret = System.getenv("API_SECRET");
 
     private static OkHttpClient client;
-    private static GeneralSMA sma;
+    private static GeneralSma sma;
 
     static {
         try {

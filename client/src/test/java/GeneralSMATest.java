@@ -1,8 +1,8 @@
-import com.fiskaly.kassensichv.sma.GeneralSMA;
+import com.fiskaly.kassensichv.sma.GeneralSma;
 
 public class GeneralSMATest {
     public static void main(String[] args) throws Exception {
-        GeneralSMA sma = new GeneralSMA();
+        GeneralSma sma = new GeneralSma();
         String response = sma.invoke("{\"jsonrpc\":\"2.0\",\"method\":\"version\"}");
 
         if (response == null || response.isEmpty()) {
