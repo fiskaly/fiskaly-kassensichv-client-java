@@ -13,12 +13,12 @@ client JAR for your target platform
 To build these projects, you can issue the following command
 within the `fiskaly-kassensichv-client-java` directory:
 
-`$ ./gradlew jar` 
+`$ ./gradlew shadowJar` 
 
-This will create two JAR files containing everything you'll need.
+This will create two Fat-JAR files containing everything you'll need.
 
-* `client/build/libs/com.fiskaly.kassensichv.client.general-<version>.jar` for standard Java platforms
-* `client/build/libs/com.fiskaly.kassensichv.client.android-<version>.jar` for Android
+* `client/build/libs/com.fiskaly.kassensichv.client.general-<version>-all.jar` for standard Java platforms
+* `client/build/libs/com.fiskaly.kassensichv.client.android-<version>-all.jar` for Android
 
 ## Setup and integration
 The integration process differs a little depending on your target
