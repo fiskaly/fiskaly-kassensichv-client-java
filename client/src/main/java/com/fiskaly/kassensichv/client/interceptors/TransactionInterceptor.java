@@ -60,8 +60,7 @@ public class TransactionInterceptor implements Interceptor {
         String queryList = "";
 
         if(!parts.isEmpty()){
-            queryList += parts.get(0);
-            parts.remove(0);
+            queryList += parts.remove(0);
 
             for (String part : parts) {
                 queryList += ("?" + part);
