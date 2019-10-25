@@ -1,6 +1,8 @@
 package com.fiskaly.kassensichv.sma.exceptions;
 
-public class SmaException extends Exception {
+import java.io.IOException;
+
+public class SmaException extends IOException {
     private int code;
 
     public SmaException(String message, int code) {
