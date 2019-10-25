@@ -3,6 +3,7 @@ package com.fiskaly.kassensichv.client.interceptors;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiskaly.kassensichv.sma.SmaInterface;
+import com.fiskaly.kassensichv.sma.exceptions.SmaException;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -49,10 +50,19 @@ public class TransactionInterceptor implements Interceptor {
         Map<String, Object> resultMap = mapper
                 .readValue(jsonRpcResponse, new TypeReference<Map<String, Object>>(){});
 
+        // Error handling
+        if (resultMap.containsKey("error")) {
+            Map<String, Object> errorMap = (Map<String, Object>) resultMap.get("error");
+            int code = (int) errorMap.get("code");
+            String message = (String) errorMap.get("message");
+
+            throw new SmaException(message, code);
+        }
+
         return mapper.writeValueAsString(resultMap.get("result"));
     }
 
-        String rewriteRoute(String sourceUrl) {
+    String rewriteRoute(String sourceUrl) {
         List<String> parts = new LinkedList<>(Arrays.asList(sourceUrl.split("\\?")));
 
         String host = parts.remove(0);
