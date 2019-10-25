@@ -32,6 +32,7 @@ hs_err_pid*
 .project
 .settings
 bin
+gradle.properties
 
 # Client
 client/**/*.so
