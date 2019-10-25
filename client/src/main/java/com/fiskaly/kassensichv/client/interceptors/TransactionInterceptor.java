@@ -50,7 +50,6 @@ public class TransactionInterceptor implements Interceptor {
         Map<String, Object> resultMap = mapper
                 .readValue(jsonRpcResponse, new TypeReference<Map<String, Object>>(){});
 
-        // Error handling
         if (resultMap.containsKey("error")) {
             Map<String, Object> errorMap = (Map<String, Object>) resultMap.get("error");
             int code = (int) errorMap.get("code");
