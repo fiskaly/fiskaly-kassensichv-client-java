@@ -8,11 +8,24 @@ version '0.0.1-alpha'
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven'
 
     apply {
         repositories {
             mavenCentral()
         }
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        baseName = 'com.fiskaly.kassensichv'
+        classifier 'sources'
+        from sourceSets.main.allJava
+    }
+
+    task docJar(type: Jar, dependsOn: javadoc) {
+        baseName = 'com.fiskaly.kassensichv'
+        classifier 'javadoc'
+        from sourceSets.main.allJava
     }
 }
 
