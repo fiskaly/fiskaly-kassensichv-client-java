@@ -11,6 +11,16 @@ public class SmaException extends IOException {
         this.code = code;
     }
 
+    @Override
+    public String getMessage() {
+        return super.getMessage()
+                + "\nError Code: "
+                + this.getCode();
+    }
+
+    /**
+     * @return Error codes as defined by JSON-RPC
+     */
     public int getCode() {
         return this.code;
     }
