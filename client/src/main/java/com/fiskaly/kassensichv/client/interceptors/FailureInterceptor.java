@@ -43,6 +43,5 @@ public class FailureInterceptor implements Interceptor {
 
             throw e;
         }
-
     }
 }
