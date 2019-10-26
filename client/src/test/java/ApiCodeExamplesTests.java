@@ -92,7 +92,7 @@ public class ApiCodeExamplesTests {
 
   final String apiKey = System.getenv("API_KEY");
   final String apiSecret = System.getenv("API_SECRET");
-  final OkHttpClient client = getClient(apiKey, apiSecret, new GeneralSMA());
+  final OkHttpClient client = getClient(apiKey, apiSecret, new GeneralSma());
 
   */
 

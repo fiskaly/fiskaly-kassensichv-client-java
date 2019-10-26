@@ -46,9 +46,9 @@ public class TokenManager implements Runnable {
      * @param responseBody Response body of the authentication request
      * @throws IOException In case of the body not being parsable
      */
-    private void  setTokenPairFromResponseBody(String responseBody) throws IOException {
+    private void setTokenPairFromResponseBody(String responseBody) throws IOException {
         final TypeReference<HashMap<String, String>> typeReference =
-                new TypeReference<HashMap<String, String>>() {};
+                new TypeReference<>() {};
 
         Map<String, String> decodedBody = mapper.readValue(responseBody, typeReference);
 

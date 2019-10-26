@@ -1,13 +1,13 @@
 import java.io.IOException;
 
-import com.fiskaly.kassensichv.sma.GeneralSMA;
+import com.fiskaly.kassensichv.sma.GeneralSma;
 
 public class SmaProvider {
-  private static GeneralSMA sma;
+  private static GeneralSma sma;
 
-  public static GeneralSMA getSma() throws IOException {
+  public static GeneralSma getSma() throws IOException {
     if(sma == null) {
-      sma = new GeneralSMA();
+      sma = new GeneralSma();
     }
 
     return sma;

@@ -2,7 +2,8 @@ package com.fiskaly.kassensichv.client.interceptors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiskaly.kassensichv.sma.SMAInterface;
+import com.fiskaly.kassensichv.sma.SmaInterface;
+import com.fiskaly.kassensichv.sma.exceptions.SmaException;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -22,13 +23,13 @@ import java.util.Map;
 /**
  * Intercepts requests that target the transaction resource
  * and swaps the request body with a version that's signed
- * by the passed SMAInterface implementation
+ * by the passed Sma implementation
  */
 public class TransactionInterceptor implements Interceptor {
-    private final SMAInterface sma;
+    private final SmaInterface sma;
     private final ObjectMapper mapper;
 
-    public TransactionInterceptor(SMAInterface sma) {
+    public TransactionInterceptor(SmaInterface sma) {
         this.sma = sma;
         this.mapper = new ObjectMapper();
     }
@@ -49,10 +50,18 @@ public class TransactionInterceptor implements Interceptor {
         Map<String, Object> resultMap = mapper
                 .readValue(jsonRpcResponse, new TypeReference<Map<String, Object>>(){});
 
+        if (resultMap.containsKey("error")) {
+            Map<String, Object> errorMap = (Map<String, Object>) resultMap.get("error");
+            int code = (int) errorMap.get("code");
+            String message = (String) errorMap.get("message");
+
+            throw new SmaException(message, code);
+        }
+
         return mapper.writeValueAsString(resultMap.get("result"));
     }
 
-        String rewriteRoute(String sourceUrl) {
+    String rewriteRoute(String sourceUrl) {
         List<String> parts = new LinkedList<>(Arrays.asList(sourceUrl.split("\\?")));
 
         String host = parts.remove(0);
