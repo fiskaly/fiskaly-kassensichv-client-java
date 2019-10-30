@@ -95,7 +95,7 @@ public class TokenManager implements Runnable {
                         .string()
                 );
             } else if(this.accessToken != null){
-                System.err.println("refresh_token Auth failed, falling back to API Pair Auth.");
+                System.err.println("refresh_token seems to be incorrect or expired. Falling back to authorization with API-Key and API-Secret.");
                 this.accessToken = null;
                 this.fetchTokenPair();
             } else {
