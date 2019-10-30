@@ -28,7 +28,7 @@ public class Authenticator implements okhttp3.Authenticator {
         tokenManager.fetchTokenPair();
 
         return response.request().newBuilder()
-                .header("Authorization", "Bearer" + tokenManager.getAccessToken())
+                .header("Authorization", "Bearer " + tokenManager.getAccessToken())
                 .header("X-Authorization-Retry", "1")
                 .build();
     }
