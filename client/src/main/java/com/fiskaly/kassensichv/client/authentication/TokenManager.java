@@ -88,11 +88,19 @@ public class TokenManager implements Runnable {
                 .build();
 
         try(Response response = client.newCall(request).execute()) {
-            this.setTokenPairFromResponseBody(
-                response
-                    .body()
-                    .string()
-            );
+            if(response.isSuccessful()) {
+                this.setTokenPairFromResponseBody(
+                    response
+                        .body()
+                        .string()
+                );
+            } else if(this.accessToken != null){
+                System.err.println("refresh_token Auth failed, falling back to API Pair Auth.");
+                this.accessToken = null;
+                this.fetchTokenPair();
+            } else {
+                System.err.println("Bad Credentials.");
+            }
         } catch (IOException ioe) {
             System.err.println(ioe);
         }

@@ -16,6 +16,12 @@ public class Authenticator implements okhttp3.Authenticator {
 
     @Override
     public synchronized Request authenticate(Route route, Response response) {
+
+        // Give up, we've already failed to authenticate in the last try
+        if (response.request().header("Authorization") != null) {
+            return null;
+        }
+
         // Force refresh
         tokenManager.fetchTokenPair();
 
