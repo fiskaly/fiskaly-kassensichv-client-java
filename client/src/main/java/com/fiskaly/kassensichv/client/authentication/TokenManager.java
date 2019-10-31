@@ -72,7 +72,6 @@ public class TokenManager implements Runnable {
 
         // First fetch
         if (this.tokenHolder.accessToken == null) {
-            System.out.println("first fetch");
             String jsonBody =
                 "{" +
                     "\"api_key\":\"" + this.apiKey + "\"," +
