@@ -13,31 +13,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TokenManager implements Runnable {
+    public static class TokenHolder {
+        public String accessToken;
+        public String refreshToken;
+    }
+
     private OkHttpClient client;
 
     private final String apiKey;
     private final String secret;
 
-    private String accessToken;
-    private String refreshToken;
+    private TokenHolder tokenHolder;
 
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private final ObjectMapper mapper = new ObjectMapper();
 
     public TokenManager(OkHttpClient client, String apiKey, String secret) {
-        this.client = client;
+        this(client, apiKey, secret, new TokenHolder());
+    }
 
+    public TokenManager(OkHttpClient client, String apiKey, String secret, TokenHolder tokenHolder) {
+        this.client = client;
         this.apiKey = apiKey;
         this.secret = secret;
+        this.tokenHolder = tokenHolder;
     }
 
     private synchronized void setTokenPair(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
+        this.tokenHolder.accessToken = accessToken;
+        this.tokenHolder.refreshToken = refreshToken;
     }
 
     public synchronized String getAccessToken() {
-        return this.accessToken;
+        return this.tokenHolder.accessToken;
     }
 
     /**
@@ -63,7 +71,8 @@ public class TokenManager implements Runnable {
         RequestBody body;
 
         // First fetch
-        if (this.accessToken == null) {
+        if (this.tokenHolder.accessToken == null) {
+            System.out.println("first fetch");
             String jsonBody =
                 "{" +
                     "\"api_key\":\"" + this.apiKey + "\"," +
@@ -75,7 +84,7 @@ public class TokenManager implements Runnable {
         } else {
             String jsonBody =
                 "{" +
-                    "\"refresh_token\": \"" + this.refreshToken + "\"" +
+                    "\"refresh_token\": \"" + this.tokenHolder.refreshToken + "\"" +
                 "}";
 
             body = RequestBody.create(jsonBody, JSON);
@@ -94,9 +103,9 @@ public class TokenManager implements Runnable {
                         .body()
                         .string()
                 );
-            } else if(this.accessToken != null){
+            } else if(this.tokenHolder.accessToken != null){
                 System.err.println("refresh_token seems to be incorrect or expired. Falling back to authorization with API-Key and API-Secret.");
-                this.accessToken = null;
+                this.tokenHolder.accessToken = null;
                 this.fetchTokenPair();
             } else {
                 System.err.println("Bad Credentials.");
