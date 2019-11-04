@@ -56,7 +56,7 @@ public class TokenManager implements Runnable {
      */
     private void setTokenPairFromResponseBody(String responseBody) throws IOException {
         final TypeReference<HashMap<String, String>> typeReference =
-                new TypeReference<>() {};
+                new TypeReference<HashMap<String, String>>() {};
 
         Map<String, String> decodedBody = mapper.readValue(responseBody, typeReference);
 
