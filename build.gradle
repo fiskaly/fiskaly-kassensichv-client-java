@@ -9,6 +9,7 @@ version '0.0.1-alpha'
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
+    apply plugin: 'signing'
 
     apply {
         repositories {
@@ -19,13 +20,34 @@ subprojects {
     task sourcesJar(type: Jar, dependsOn: classes) {
         baseName = 'com.fiskaly.kassensichv'
         classifier 'sources'
-        from sourceSets.main.allJava
+        from sourceSets.main.allSource
     }
 
     task docJar(type: Jar, dependsOn: javadoc) {
         baseName = 'com.fiskaly.kassensichv'
         classifier 'javadoc'
-        from sourceSets.main.allJava
+        from javadoc
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                  authentication(userName: nexusUsername, password: nexusPassword)
+                }
+
+            }
+        }
+    }
+
+    artifacts {
+      archives docJar, sourcesJar
+    }
+
+    signing {
+      sign configurations.archives
     }
 }
 
