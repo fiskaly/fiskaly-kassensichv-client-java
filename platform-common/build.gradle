@@ -13,3 +13,7 @@ repositories {
 
 dependencies {
 }
+
+jar {
+    baseName = 'com.fiskaly.kassensichv.platform-common'
+}
