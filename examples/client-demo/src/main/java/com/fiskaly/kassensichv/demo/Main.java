@@ -2,7 +2,7 @@ package com.fiskaly.kassensichv.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiskaly.kassensichv.client.ClientFactory;
-import com.fiskaly.kassensichv.sma.GeneralSMA;
+import com.fiskaly.kassensichv.sma.GeneralSma;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -41,7 +41,7 @@ public class Main {
         OkHttpClient client = ClientFactory.getClient(
                 API_KEY,
                 API_SECRET,
-                new GeneralSMA()
+                new GeneralSma()
         );
 
         System.out.println("Instantiated client");
