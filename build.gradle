@@ -3,13 +3,13 @@ plugins {
     id 'java'
 }
 
-group 'com.fiskaly'
-version '0.0.1-alpha'
-
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'signing'
+
+    group 'com.fiskaly.kassensichv'
+    version '0.0.1-alpha'
 
     apply {
         repositories {
@@ -38,6 +38,33 @@ subprojects {
                   authentication(userName: nexusUsername, password: nexusPassword)
                 }
 
+                pom.project {
+                    name 'Fiskaly KassensichV Java Client'
+                    packaging 'jar'
+                    description 'Official Java client for Fiskaly\'s KassensichV API'
+                    url 'https://github.com/fiskaly/fiskaly-kassensichv-client-java'
+
+                    scm {
+                        connection 'scm:https://github.com/fiskaly/fiskaly-kassensichv-client-java.git'
+                        developerConnection 'scm:git:https://github.com/fiskaly/fiskaly-kassensichv-client-java.git'
+                        url 'https://github.com/fiskaly/fiskaly-kassensichv-client-java'
+                    }
+
+                    licenses {
+                        license {
+                            name 'The MIT License'
+                            url 'https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/license.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'benjamin.auinger.fiskaly'
+                            name 'Benjamin Auinger'
+                            email 'benjamin@fiskaly.com'
+                        }
+                    }
+                }
             }
         }
     }
@@ -55,14 +82,22 @@ repositories {
     mavenCentral()
 }
 
+final PLATFORM_GENERAL = "general"
+final PLATFORM_ANDROID = "android"
+
 def target = System.properties.getProperty("target")
 
+if (target == null) {
+    target = PLATFORM_GENERAL
+    System.out.println("No platform specified. Defaulting to 'general' ...")
+}
+
 dependencies {
-    if (target == "general") {
+    if (target == PLATFORM_GENERAL) {
         implementation project(':platform-general')
     }
 
-    if (target == "android") {
+    if (target == PLATFORM_ANDROID) {
         implementation project(':platform-android')
     }
 
