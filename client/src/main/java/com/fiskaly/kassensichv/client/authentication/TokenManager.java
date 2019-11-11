@@ -102,7 +102,7 @@ public class TokenManager implements Runnable {
                         .body()
                         .string()
                 );
-            } else if(this.tokenHolder.accessToken != null){
+            } else if(this.tokenHolder.accessToken != null) {
                 System.err.println("refresh_token seems to be incorrect or expired. Falling back to authorization with API-Key and API-Secret.");
                 this.tokenHolder.accessToken = null;
                 this.fetchTokenPair();
@@ -112,8 +112,6 @@ public class TokenManager implements Runnable {
         } catch (IOException ioe) {
             System.err.println(ioe);
         }
-
-
     }
 
     // Gets called when token needs to be refreshed
