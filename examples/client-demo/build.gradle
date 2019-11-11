@@ -23,5 +23,24 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile fileTree(dir: 'libs', include: '*.jar')
+    // compile fileTree(dir: 'libs', include: '*.jar')
+    implementation group: 'com.fiskaly.kassensichv', name: 'client', version: '0.0.1-alpha'
+    implementation group: 'com.fiskaly.kassensichv', name: 'platform-general', version: '0.0.1-alpha'
+    implementation group: 'com.fiskaly.kassensichv', name: 'platform-common', version: '0.0.1-alpha'
+
+    implementation (
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.9'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9']
+    )
+
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'com.fiskaly.kassensichv.demo.Main'
+        )
+    }
 }
