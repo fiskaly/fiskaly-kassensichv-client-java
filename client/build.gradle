@@ -1,16 +1,11 @@
-group 'com.fiskaly'
-version '0.0.1-alpha'
-
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
 
     implementation project(':platform-common')
 
-    testCompile project(':platform-common')
-    testCompile project(':platform-general')
-
-    implementation project(':platform-common')
+    testImplementation project(':platform-common')
+    testImplementation project(':platform-general')
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 
     implementation (
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.9'],
@@ -18,10 +13,10 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9']
     )
 
-    compile group: 'org.json', name: 'json', version: '20190722'
+    testImplementation group: 'org.json', name: 'json', version: '20190722'
 }
 
 jar {
-    baseName = 'com.fiskaly.kassensichv.client'
+    baseName = 'client'
 }
 
