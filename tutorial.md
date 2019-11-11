@@ -6,20 +6,6 @@ client in your Java application.
 therefore disobeys some best practices to simplify 
 the resulting source code.
 
-## What you'll need
-In order to follow along with the tutorial you'll need the appropriate
-client JAR for your target platform
-
-To build these projects, you can issue the following command
-within the `fiskaly-kassensichv-client-java` directory:
-
-`$ ./gradlew shadowJar -Dtarget=<general|android>` 
-
-This will create two Fat-JAR files containing everything you'll need.
-
-* `./build/libs/com.fiskaly.kassensichv.client.general-<version>-all.jar` for standard Java platforms
-* `./build/libs/com.fiskaly.kassensichv.client.android-<version>-all.jar` for Android
-
 ## Setup and integration
 The integration process differs a little depending on your target
 platform. Because we need to provide you with a platform specific SMA
@@ -27,14 +13,60 @@ implementation, there are 2 different implementations of the SMA interface.
 One for all standard JVM platforms (e.g. desktop) and another one
 for Android devices. 
 
-The JAR files described in the section above contain the right SMA
-implementation for your target platform. Therefore, all you'll need to
-do is to add the appropriate JAR file to your project
+### Gradle
+For integration using `Gradle`, use the following dependencies:
 
-#### Future notice
-In the near future you'll be able to add all necessary dependencies as
-either Maven or Gradle dependencies, so the integration process will get
-more efficient.
+```
+implementation group: 'com.fiskaly.kassensichv', name: 'client', version: '0.0.1-alpha'
+implementation group: 'com.fiskaly.kassensichv', name: 'platform-<general|android>', version: '0.0.1-alpha'
+implementation group: 'com.fiskaly.kassensichv', name: 'platform-common', version: '0.0.1-alpha'
+
+implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
+```
+### Maven
+For integration using `Maven`, use the following dependencies:
+
+```
+<dependencies>
+    <dependency>
+      <groupId>com.fiskaly.kassensichv</groupId>
+      <artifactId>platform-<general|android></artifactId>
+      <version>0.0.1-alpha</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fiskaly.kassensichv</groupId>
+      <artifactId>platform-common</artifactId>
+      <version>0.0.1-alpha</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fiskaly.kassensichv</groupId>
+      <artifactId>client</artifactId>
+      <version>0.0.1-alpha</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>4.0.1</version>
+    </dependency>
+</dependencies>
+```
+### Manual
+In case you are not using either `Maven` or `Gradle` you'll have to
+embed a Fat-JAR into your project.
+
+To build the Fat-JAR(s), you can issue the following command
+within the `fiskaly-kassensichv-client-java` directory:
+
+`$ ./gradlew shadowJar -Dtarget=<general|android>` 
+
+This will create two Fat-JAR files containing everything
+you'll need depending on your target platform.
+
+* `./build/libs/com.fiskaly.kassensichv.client.general-<version>-all.jar` for standard Java platforms
+* `./build/libs/com.fiskaly.kassensichv.client.android-<version>-all.jar` for Android
 
 ## Working with the client
 Currently all the client does is adding interceptors to help you being
@@ -52,7 +84,7 @@ passing it to the factory method.
 OkHttpClient client = ClientFactory.getClient(
         apiKey,
         apiSecret,
-        new AndroidSMA()
+        new AndroidSma()
 );
 ```
 
