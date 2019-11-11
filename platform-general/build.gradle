@@ -1,21 +1,38 @@
-group 'com.fiskaly'
-version '0.0.1-alpha'
-
 dependencies {
     implementation group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
     implementation project(':platform-common')
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 
     implementation group:'org.xerial', name:'sqlite-jdbc', version:'3.8.11.2'
 }
 
-jar {
-    baseName = 'com.fiskaly.kassensichv.platform-general'
+final RESOURCE_PATH = 'src/main/resources'
 
-    from ('../sma/dist/') {
+task copySmaLibs {
+    final BASE_PATH = '../sma/dist'
+
+    copy {
+        from fileTree(BASE_PATH)
         include 'com.fiskaly.kassensichv.sma-darwin-*'
         include 'com.fiskaly.kassensichv.sma-windows-*'
         include 'com.fiskaly.kassensichv.sma-linux-*'
+        into RESOURCE_PATH
     }
+}
+
+task copyLicense {
+    final BASE_PATH = '../sma/'
+
+    copy {
+        from file(BASE_PATH + 'LICENSE')
+        rename { fileName ->
+            fileName.replace('LICENSE', 'SMA-LICENSE')
+        }
+        into RESOURCE_PATH
+    }
+}
+
+jar {
+    baseName = 'platform-general'
 }
