@@ -1,13 +1,10 @@
-group 'com.fiskaly'
-version '0.0.1-alpha'
-
 configurations {
     mobileLibrary
 }
 
 dependencies {
-    compile project(':platform-common')
-    compile files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
+    implementation project(':platform-common')
+    implementation files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
     mobileLibrary files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
 }
 
@@ -37,8 +34,31 @@ task copyAndroidDependencies {
     }
 }
 
+task copyLicenses {
+    final BASE_PATH = '../sma/'
+    final LIB_PATH = 'src/main/resources/lib'
+    final GO_LICENSE_PATH = BASE_PATH + '3rd-party-licenses/' +
+            'golang.org/LICENSE'
+
+    copy {
+        from file(BASE_PATH + 'LICENSE')
+        rename { fileName ->
+            fileName.replace('LICENSE', 'SMA-LICENSE')
+        }
+        into LIB_PATH
+    }
+
+    copy {
+        from file(GO_LICENSE_PATH)
+        rename { fileName ->
+            fileName.replace('LICENSE', 'GOLANG-LICENSE')
+        }
+        into LIB_PATH
+    }
+}
+
 jar {
-    baseName = 'com.fiskaly.kassensichv.platform-android'
+    baseName = 'platform-android'
 
     from {
         configurations.mobileLibrary.collect { it.isDirectory() ? it : zipTree(it) }
