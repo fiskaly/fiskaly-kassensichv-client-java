@@ -39,13 +39,18 @@ The built library will be available at ```./build/libs/com.fiskaly.kassensichv.c
 
 
 ## Integration
-Be sure to have a look at our [integration guide / tutorial](https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/tutorial.md).
+Be sure to have a look at our [integration guide / tutorial](https://github.com/fiskaly/fiskaly-kassensichv-client-java/blob/master/tutorial.md)
+for all ways to integrate the client into your project.
 
-To integrate the client into your project, use the appropriate client build for your target platform.
+For integration using `Gradle`, use the following dependencies:
 
-* `client/build/libs/com.fiskaly.kassensichv.client.general-<version>.jar` for standard Java platforms
-* `client/build/libs/com.fiskaly.kassensichv.client.android-<version>.jar` for Android
+```
+implementation group: 'com.fiskaly.kassensichv', name: 'client', version: '0.0.1-alpha'
+implementation group: 'com.fiskaly.kassensichv', name: 'platform-<general|android>', version: '0.0.1-alpha'
+implementation group: 'com.fiskaly.kassensichv', name: 'platform-common', version: '0.0.1-alpha'
 
+implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
+```
 ## Usage example
 
 The following example demonstrates how to instantiate an OkHttpClient using the SDK
