@@ -48,8 +48,6 @@ For integration using `Gradle`, use the following dependencies:
 implementation group: 'com.fiskaly.kassensichv', name: 'client', version: '0.0.1-alpha'
 implementation group: 'com.fiskaly.kassensichv', name: 'platform-<general|android>', version: '0.0.1-alpha'
 implementation group: 'com.fiskaly.kassensichv', name: 'platform-common', version: '0.0.1-alpha'
-
-implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
 ```
 ## Usage example
 

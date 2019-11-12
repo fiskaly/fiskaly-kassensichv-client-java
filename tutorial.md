@@ -20,8 +20,6 @@ For integration using `Gradle`, use the following dependencies:
 implementation group: 'com.fiskaly.kassensichv', name: 'client', version: '0.0.1-alpha'
 implementation group: 'com.fiskaly.kassensichv', name: 'platform-<general|android>', version: '0.0.1-alpha'
 implementation group: 'com.fiskaly.kassensichv', name: 'platform-common', version: '0.0.1-alpha'
-
-implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
 ```
 ### Maven
 For integration using `Maven`, use the following dependencies:
@@ -44,12 +42,6 @@ For integration using `Maven`, use the following dependencies:
       <groupId>com.fiskaly.kassensichv</groupId>
       <artifactId>client</artifactId>
       <version>0.0.1-alpha</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>4.0.1</version>
     </dependency>
 </dependencies>
 ```
