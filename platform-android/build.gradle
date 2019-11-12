@@ -37,8 +37,8 @@ task copyAndroidDependencies {
 task copyLicenses {
     final BASE_PATH = '../sma/'
     final LIB_PATH = 'src/main/resources/lib'
-    final GO_LICENSE_PATH = BASE_PATH + '3rd-party-licenses/' +
-            'golang.org/LICENSE'
+    final LICENSES_TARGET = 'src/main/resources/3rd-party-licenses'
+    final THIRD_PARTY_LICENSES_PATH = BASE_PATH + '3rd-party-licenses/'
 
     copy {
         from file(BASE_PATH + 'LICENSE')
@@ -49,11 +49,8 @@ task copyLicenses {
     }
 
     copy {
-        from file(GO_LICENSE_PATH)
-        rename { fileName ->
-            fileName.replace('LICENSE', 'GOLANG-LICENSE')
-        }
-        into LIB_PATH
+        from fileTree(THIRD_PARTY_LICENSES_PATH)
+        into LICENSES_TARGET
     }
 }
 
