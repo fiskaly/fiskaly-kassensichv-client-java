@@ -39,9 +39,9 @@ subprojects {
                 }
 
                 pom.project {
-                    name 'Fiskaly KassensichV Java Client'
+                    name 'fiskaly KassensichV Java Client'
                     packaging 'jar'
-                    description 'Official Java client for Fiskaly\'s KassensichV API'
+                    description 'Official Java client for fiskaly\'s KassensichV API'
                     url 'https://github.com/fiskaly/fiskaly-kassensichv-client-java'
 
                     scm {
