@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    implementation project(':platform-common')
+    compile project(':platform-common')
     implementation files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
     mobileLibrary files('src/main/libs/com.fiskaly.kassensichv.sma.jar')
 }

@@ -1,7 +1,7 @@
 dependencies {
     compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.0.1'
 
-    implementation project(':platform-common')
+    compile project(':platform-common')
 
     testImplementation project(':platform-common')
     testImplementation project(':platform-general')

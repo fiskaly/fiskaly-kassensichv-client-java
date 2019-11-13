@@ -1,6 +1,6 @@
 dependencies {
     implementation group: 'com.github.jnr', name: 'jnr-ffi', version: '2.1.10'
-    implementation project(':platform-common')
+    compile project(':platform-common')
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 

@@ -19,7 +19,6 @@ For integration using `Gradle`, use the following dependencies:
 ```
 implementation group: 'com.fiskaly.kassensichv', name: 'client', version: '0.0.1-alpha'
 implementation group: 'com.fiskaly.kassensichv', name: 'platform-<general|android>', version: '0.0.1-alpha'
-implementation group: 'com.fiskaly.kassensichv', name: 'platform-common', version: '0.0.1-alpha'
 ```
 ### Maven
 For integration using `Maven`, use the following dependencies:
@@ -29,12 +28,6 @@ For integration using `Maven`, use the following dependencies:
     <dependency>
       <groupId>com.fiskaly.kassensichv</groupId>
       <artifactId>platform-<general|android></artifactId>
-      <version>0.0.1-alpha</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fiskaly.kassensichv</groupId>
-      <artifactId>platform-common</artifactId>
       <version>0.0.1-alpha</version>
     </dependency>
 
