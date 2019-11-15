@@ -52,18 +52,16 @@ public class ResponseTimeLoggingInterceptor implements Interceptor  {
         this.writer = new OutputStreamWriter(logStream, Charset.forName(StandardCharsets.UTF_8.name()));
     }
 
-    @NotNull
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
-        System.out.println("Intercept");
         Request request = chain.request();
-        Headers requestHeaders = request.headers();
 
         String method = request.method();
         String url = request.url().toString();
 
         long start = System.currentTimeMillis();
-        String timestamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss:SSS")
+                .format(new Date());
 
         Response response = chain.proceed(request);
 
