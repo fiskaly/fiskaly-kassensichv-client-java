@@ -128,6 +128,7 @@ public class RunCommand implements Callable<Void> {
                 Thread.sleep(requestInterval);
             }
         } catch (IOException ioe) {
+            System.out.println("ioe");
             errorWriter.append("Request failed: " + ioe.getMessage());
 
             for (StackTraceElement trace : ioe.getStackTrace()) {
@@ -155,7 +156,7 @@ public class RunCommand implements Callable<Void> {
         final UUID tssId = UUID.randomUUID();
 
         final Request createTssRequest = new Request.Builder()
-                .url("https://kassensichv.io/api/v0/tss" + tssId)
+                .url("https://kassensichv.io/api/v0/tss/" + tssId)
                 .put(RequestBody.create(jsonBody, MediaType.parse("application/json")))
                 .build();
 
@@ -171,14 +172,14 @@ public class RunCommand implements Callable<Void> {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, String> clientMap = new HashMap<>();
 
-        clientMap.put("serial_number", "fiskaly-java-serial-number");
-        String jsonBody = mapper.writeValueAsString(clientMap);
-
         final UUID clientId = UUID.randomUUID();
+
+        clientMap.put("serial_number", clientId.toString());
+        String jsonBody = mapper.writeValueAsString(clientMap);
 
         final Request createClientRequest = new Request.Builder()
                 .url("https://kassensichv.io/api/v0/tss/" + tssId + "/client/" + clientId)
-                .post(RequestBody.create(jsonBody, MediaType.parse("application/json")))
+                .put(RequestBody.create(jsonBody, MediaType.parse("application/json")))
                 .build();
 
         client
@@ -198,24 +199,13 @@ public class RunCommand implements Callable<Void> {
         transactionMap.put("type", "RECEIPT");
         transactionMap.put("state", "ACTIVE");
 
-        Map<String, Object> transactionDataMap = new HashMap<>();
-
-        transactionMap.put("data", transactionDataMap);
-
-        Map<String, Object> aeaoMap = new HashMap<>();
-        aeaoMap.put("receipt_type", "RECEIPT");
-
         Map<String, Object> amountsPerVatRateMap = new HashMap<>();
         amountsPerVatRateMap.put("vat_rate", "19");
         amountsPerVatRateMap.put("amount", "10.0");
 
-        aeaoMap.put("amounts_per_vat_rate", new Object[] { amountsPerVatRateMap });
-
         Map<String, Object> amountPerPaymentTypeMap = new HashMap<>();
         amountPerPaymentTypeMap.put("payment_type", "CASH");
         amountPerPaymentTypeMap.put("amount", "10.0");
-
-        aeaoMap.put("amount_per_payment_type", amountPerPaymentTypeMap);
 
         String jsonBody = mapper.writeValueAsString(transactionMap);
 
