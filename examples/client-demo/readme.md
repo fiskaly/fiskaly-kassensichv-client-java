@@ -36,8 +36,31 @@ $ export API_KEY=<your-api-key>
 $ export API_SECRET=<your-api-secret>
 ```
 
-After these have been set, you can run the application using the following command.
+### Basic Client Test
+If you simply want to test the compatibility of the client in regards to your platform, use the following
+command:
 
 ```
-$ java -jar client-demo-1.0-SNAPSHOT-all.jar.jar
+$ java -jar client-demo-1.0-SNAPSHOT-all.jar
 ```
+
+This will issue a few test requests to verify it working on your platform.
+
+
+### Advanced Client Test
+The demo application also offers an advanced test option that allows you to measure response times over a
+period of time.
+
+```
+$ java -jar client-demo-1.0-SNAPSHOT-all.jar monitor --out-file=<path> --interval=<milliseconds> \
+    --error-out-file=<path>
+```
+
+This will log requests using the following CSV schema:
+
+```
+timestamp;requestId;method;url;clientDelta;serverDelta
+```
+
+If no paths are specified the application will default to `System.out` and
+`System.err` respectively.
