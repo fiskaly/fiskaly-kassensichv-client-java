@@ -39,8 +39,8 @@ public class ResponseTimeLoggingInterceptor implements Interceptor  {
                     + requestId + ";"
                     + method + ";"
                     + url + ";"
-                    + clientDelta + Long.toString(clientDelta) + ";"
-                    + serverDelta + Long.toString(serverDelta);
+                    + Long.toString(clientDelta) + ";"
+                    + Long.toString(serverDelta);
         }
     }
 
@@ -58,14 +58,12 @@ public class ResponseTimeLoggingInterceptor implements Interceptor  {
 
         String method = request.method();
         String url = request.url().toString();
-
-        long start = System.currentTimeMillis();
         String timestamp = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss:SSS")
                 .format(new Date());
 
         Response response = chain.proceed(request);
 
-        long clientDelta = System.currentTimeMillis()- start;
+        long clientDelta = response.receivedResponseAtMillis() - response.sentRequestAtMillis();
 
         Headers responseHeaders = response.headers();
 
