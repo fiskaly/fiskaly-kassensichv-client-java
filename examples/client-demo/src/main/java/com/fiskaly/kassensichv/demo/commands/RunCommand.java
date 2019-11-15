@@ -2,10 +2,7 @@ package com.fiskaly.kassensichv.demo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiskaly.kassensichv.demo.interceptors.ResponseTimeLoggingInterceptor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.*;
 import picocli.CommandLine;
 
 import java.io.FileOutputStream;
@@ -111,10 +108,14 @@ public class RunCommand implements Callable<Void> {
                 System.out.println("Performing transaction...");
                 performTransaction(client, tssId, clientId);
                 System.out.println("Performed transaction");
+
+                Thread.sleep(requestInterval);
             }
         } catch (IOException ioe) {
             System.err.println("Transaction failed: " + ioe.getMessage());
             ioe.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         return null;
@@ -137,7 +138,8 @@ public class RunCommand implements Callable<Void> {
 
         client
                 .newCall(createTssRequest)
-                .execute();
+                .execute()
+                .close();
 
         return tssId.toString();
     }
@@ -158,7 +160,8 @@ public class RunCommand implements Callable<Void> {
 
         client
                 .newCall(createClientRequest)
-                .execute();
+                .execute()
+                .close();
 
         return clientId.toString();
     }
@@ -200,6 +203,8 @@ public class RunCommand implements Callable<Void> {
 
         client
                 .newCall(createTransaction)
-                .execute();
+                .execute()
+                .close();
+
     }
 }
