@@ -45,11 +45,16 @@ public class ResponseTimeLoggingInterceptor implements Interceptor  {
     }
 
     private OutputStream logStream;
+    private OutputStream errorStream;
     private OutputStreamWriter writer;
+    private OutputStreamWriter errorWriter;
 
-    public ResponseTimeLoggingInterceptor(OutputStream logStream) {
+    public ResponseTimeLoggingInterceptor(OutputStream logStream, OutputStream errorStream) {
         this.logStream = logStream;
         this.writer = new OutputStreamWriter(logStream, Charset.forName(StandardCharsets.UTF_8.name()));
+
+        this.errorStream = errorStream;
+        this.errorWriter = new OutputStreamWriter(errorStream, Charset.forName(StandardCharsets.UTF_8.name()));
     }
 
     @Override
@@ -70,6 +75,16 @@ public class ResponseTimeLoggingInterceptor implements Interceptor  {
         String requestId = responseHeaders.get("x-request-id");
         String responseTimeHeader = responseHeaders.get("x-response-time");
         long serverDelta = responseTimeHeader == null ? -1 : Long.valueOf(responseTimeHeader);
+
+        if (!response.isSuccessful()) {
+            this.errorWriter.append(
+                    timestamp + ";" + requestId + ";" + method + ";" +
+                    url + ";" + response.code() + "\n"
+            );
+            this.errorWriter.flush();
+
+            return response;
+        }
 
         LoggingRecord record = new LoggingRecord(timestamp, requestId, method, url, clientDelta, serverDelta);
 

@@ -108,7 +108,7 @@ public class RunCommand implements Callable<Void> {
 
         this.client = client
                 .newBuilder()
-                .addNetworkInterceptor(new ResponseTimeLoggingInterceptor(outStream))
+                .addNetworkInterceptor(new ResponseTimeLoggingInterceptor(outStream, errStream))
                 .build();
 
         try {
