@@ -5,9 +5,9 @@ import com.fiskaly.kassensichv.demo.interceptors.ResponseTimeLoggingInterceptor;
 import okhttp3.*;
 import picocli.CommandLine;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -74,36 +74,52 @@ public class RunCommand implements Callable<Void> {
                 names = {"-h", "--help"},
                 usageHelp = true
         ) boolean help
-    ) throws IOException {
-        OutputStream outStream;
-        OutputStream errStream;
+    ) throws IOException{
+        OutputStream outStream = null;
+        OutputStream errStream = null;
 
         if (outPath == null) {
             outStream = System.out;
         } else {
-            outStream = new FileOutputStream(outPath, true);
+            try {
+                outStream = new FileOutputStream(outPath, true);
+            } catch (FileNotFoundException e) {
+                System.err.println("Specified log file could not be opened: " + e.getMessage());
+                e.printStackTrace();
+
+                System.exit(1);
+            }
         }
 
         if (errPath == null) {
             errStream = System.err;
         } else {
-            errStream = new FileOutputStream(errPath, true);
+            try {
+                errStream = new FileOutputStream(errPath, true);
+            } catch (FileNotFoundException e) {
+                System.err.println("Specified error log file could not be opened: " + e.getMessage());
+                e.printStackTrace();
+
+                System.exit(1);
+            }
         }
+
+        OutputStreamWriter errorWriter = new OutputStreamWriter(errStream, Charset.forName(StandardCharsets.UTF_8.name()));
 
         this.client = client
                 .newBuilder()
                 .addNetworkInterceptor(new ResponseTimeLoggingInterceptor(outStream))
                 .build();
 
-        System.out.println("Creating TSS...");
-        final String tssId = createTss(client);
-        System.out.println("Created TSS: " + tssId);
-
-        System.out.println("Creating client...");
-        final String clientId = createClient(client, tssId);
-        System.out.println("Created client: " + clientId);
-
         try {
+            System.out.println("Creating TSS...");
+            final String tssId = createTss(client);
+            System.out.println("Created TSS: " + tssId);
+
+            System.out.println("Creating client...");
+            final String clientId = createClient(client, tssId);
+            System.out.println("Created client: " + clientId);
+
             for (;;) {
                 System.out.println("Performing transaction...");
                 performTransaction(client, tssId, clientId);
@@ -112,10 +128,17 @@ public class RunCommand implements Callable<Void> {
                 Thread.sleep(requestInterval);
             }
         } catch (IOException ioe) {
-            System.err.println("Transaction failed: " + ioe.getMessage());
-            ioe.printStackTrace();
+            errorWriter.append("Request failed: " + ioe.getMessage());
+
+            for (StackTraceElement trace : ioe.getStackTrace()) {
+                errorWriter.append(trace.toString() + "\n");
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
+
+            for (StackTraceElement trace : e.getStackTrace()) {
+                errorWriter.append(trace.toString() + "\n");
+            }
         }
 
         return null;
@@ -205,6 +228,5 @@ public class RunCommand implements Callable<Void> {
                 .newCall(createTransaction)
                 .execute()
                 .close();
-
     }
 }
