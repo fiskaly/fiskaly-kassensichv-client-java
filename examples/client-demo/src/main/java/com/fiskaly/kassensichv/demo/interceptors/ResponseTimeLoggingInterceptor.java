@@ -4,7 +4,6 @@ import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -44,21 +43,16 @@ public class ResponseTimeLoggingInterceptor implements Interceptor  {
         }
     }
 
-    private OutputStream logStream;
-    private OutputStream errorStream;
     private OutputStreamWriter writer;
     private OutputStreamWriter errorWriter;
 
     public ResponseTimeLoggingInterceptor(OutputStream logStream, OutputStream errorStream) {
-        this.logStream = logStream;
         this.writer = new OutputStreamWriter(logStream, Charset.forName(StandardCharsets.UTF_8.name()));
-
-        this.errorStream = errorStream;
         this.errorWriter = new OutputStreamWriter(errorStream, Charset.forName(StandardCharsets.UTF_8.name()));
     }
 
     @Override
-    public Response intercept(@NotNull Chain chain) throws IOException {
+    public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
         String method = request.method();
