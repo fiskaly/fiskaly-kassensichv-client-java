@@ -44,7 +44,7 @@ command:
 $ java -jar client-demo-1.0-SNAPSHOT-all.jar
 ```
 
-This will issue a few test requests to verify it working on your platform.
+This will issue a few test requests to verify the client is working on your platform.
 
 
 ### Advanced Client Test
