@@ -128,7 +128,6 @@ public class RunCommand implements Callable<Void> {
                 Thread.sleep(requestInterval);
             }
         } catch (IOException ioe) {
-            System.out.println("ioe");
             errorWriter.append("Request failed: " + ioe.getMessage());
 
             for (StackTraceElement trace : ioe.getStackTrace()) {
