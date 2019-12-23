@@ -17,7 +17,27 @@ public class Client {
         this.client = ClientFactory.getClient(apiKey, apiSecret, sma);
     }
 
-    public String request(String method, String path, Map<String, ?> query, Map<String, String> headers, Map<String, ?> body)
+    public String request(String method, String path)
+        throws Exception {
+            this.request(method, path, null, null, null);
+    }
+
+    public String request(String method, String path, Map<String, ?> query)
+        throws Exception {
+            this.request(method, path, null, query, null);
+    }
+
+    public String request(String method, String path, Map<String, ?> body)
+        throws Exception {
+            this.request(method, path, body, null, null);
+    }
+
+    public String request(String method, String path, Map<String, ?> body, Map<String, ?> query)
+        throws Exception {
+            this.request(method, path, body, query, null);
+    }
+
+    public String request(String method, String path, Map<String, ?> body, Map<String, ?> query, Map<String, String> headers)
         throws Exception {
 
         RequestBody parsedBody = null;
