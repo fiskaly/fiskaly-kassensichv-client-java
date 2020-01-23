@@ -8,33 +8,29 @@ import java.util.Map;
 
 public class Client {
 
-    private static String BASE_URL = "https://kassensichv.io/api/v0/";
+    private static String BASE_URL;
     private static final ObjectMapper mapper = new ObjectMapper();
 
     private OkHttpClient client;
 
-    public Client(String apiKey, String apiSecret, SmaInterface sma) {
+    public Client(String apiKey, String apiSecret, String baseUrl,SmaInterface sma) {
         this.client = ClientFactory.getClient(apiKey, apiSecret, sma);
+        this.BASE_URL = baseUrl;
     }
 
     public String request(String method, String path)
         throws Exception {
-            this.request(method, path, null, null, null);
-    }
-
-    public String request(String method, String path, Map<String, ?> query)
-        throws Exception {
-            this.request(method, path, null, query, null);
+            return this.request(method, path, null, null, null);
     }
 
     public String request(String method, String path, Map<String, ?> body)
         throws Exception {
-            this.request(method, path, body, null, null);
+            return this.request(method, path, body, null, null);
     }
 
     public String request(String method, String path, Map<String, ?> body, Map<String, ?> query)
         throws Exception {
-            this.request(method, path, body, query, null);
+            return this.request(method, path, body, query, null);
     }
 
     public String request(String method, String path, Map<String, ?> body, Map<String, ?> query, Map<String, String> headers)
