@@ -1,15 +1,12 @@
 import com.fiskaly.kassensichv.client.Client;
 import com.fiskaly.kassensichv.sma.GeneralSma;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GenericClientTests {
 
     private static String apiKey = System.getenv("API_KEY");
